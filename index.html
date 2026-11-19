@@ -2096,9 +2096,10 @@ body.is-authenticated .ec-auth{ display:none; }
 .ec-composer,.ec-suggest,.ec-foot{ width:100%; max-width:var(--ec-col); margin-left:auto; margin-right:auto; }
 
 /* empty state: greeting + composer centered (Claude-style) */
-.ec-welcome{ display:flex; align-items:center; justify-content:center; gap:14px; padding:4px 0; text-align:center; }
-.ec-welcome-mark{ width:38px; height:38px; flex:none; }
-.ec-welcome h1{ margin:0; font:400 clamp(28px,3.6vw,38px)/1.15 var(--ec-serif); letter-spacing:-.015em; color:var(--ec-text); }
+.ec-welcome{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:12px 0 6px; text-align:center; animation:ec-welcome-in .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ec-welcome-in{ from{ opacity:0; transform:translateY(8px); } }
+.ec-welcome-mark{ width:52px; height:52px; flex:none; filter:drop-shadow(0 10px 24px rgba(0,0,0,.4)); }
+.ec-welcome h1{ margin:0; font:400 clamp(28px,3.6vw,38px)/1.15 var(--ec-serif); letter-spacing:-.015em; color:var(--ec-text); background:linear-gradient(180deg,var(--ec-text) 0%,color-mix(in srgb,var(--ec-text) 70%,var(--ec-bg)) 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 @media (min-width:701px){
   .ec-main.is-empty .ec-stage{ justify-content:center; padding-bottom:9vh; }
   .ec-main.is-empty .ec-scroll{ flex:0 0 auto; overflow:visible; padding-bottom:26px; }
@@ -2107,9 +2108,9 @@ body.is-authenticated .ec-auth{ display:none; }
 .ec-main:not(.is-empty) .ec-suggest{ display:none!important; }
 
 /* ---------- composer ---------- */
-.ec-composer{ position:relative; display:flex; flex-direction:column; padding:10px 10px 8px 14px; border:1px solid var(--ec-line-2); border-radius:20px; background:var(--ec-raised); box-shadow:var(--ec-shadow); transition:border-color .15s,box-shadow .15s; }
-.ec-composer:focus-within{ border-color:color-mix(in srgb,var(--ec-text) 30%,transparent); }
-.ec-main.is-dragging .ec-composer{ border-color:var(--ec-accent); box-shadow:0 0 0 3px var(--ec-accent-soft); }
+.ec-composer{ position:relative; display:flex; flex-direction:column; padding:12px 12px 10px 16px; border:1px solid var(--ec-line-2); border-radius:22px; background:linear-gradient(180deg,var(--ec-raised),color-mix(in srgb,var(--ec-raised) 94%,var(--ec-bg))); box-shadow:0 20px 50px -24px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.04); transition:border-color .2s,box-shadow .2s,transform .18s; }
+.ec-composer:focus-within{ border-color:color-mix(in srgb,var(--ec-text) 40%,transparent); box-shadow:0 24px 60px -28px rgba(0,0,0,.75),0 0 0 3px color-mix(in srgb,var(--ec-text) 8%,transparent),inset 0 1px 0 rgba(255,255,255,.05); }
+.ec-main.is-dragging .ec-composer{ border-color:var(--ec-accent); box-shadow:0 0 0 3px var(--ec-accent-soft); transform:scale(1.005); }
 #page-chat #chatInput{ display:block; width:100%; min-height:28px; max-height:240px; margin:0; padding:6px 4px 4px; border:0; outline:0; resize:none; background:transparent; box-shadow:none; color:var(--ec-text); font:16px/1.5 var(--ec-font); }
 #page-chat #chatInput::placeholder{ color:var(--ec-text-3); }
 .ec-composer-bar{ display:flex; align-items:center; gap:6px; margin-top:6px; }
@@ -2120,11 +2121,13 @@ body.is-authenticated .ec-auth{ display:none; }
 .ec-mode{ display:inline-flex; align-items:center; gap:4px; height:32px; padding:0 8px 0 10px; border:0; border-radius:9px; background:transparent; color:var(--ec-text-2); font:550 13.5px var(--ec-font); cursor:pointer; }
 .ec-mode:hover,.ec-mode[aria-expanded="true"]{ background:var(--ec-hover); color:var(--ec-text); }
 .ec-mode .ec-i{ width:15px; height:15px; }
-.ec-send{ width:32px; height:32px; flex:none; display:grid; place-items:center; padding:0; border:0; border-radius:10px; background:var(--ec-accent); color:var(--ec-on-accent); cursor:pointer; opacity:.4; transition:opacity .15s,background .15s; }
-.ec-send.is-ready{ opacity:1; }
-.ec-send.is-ready:hover{ background:var(--ec-accent-hover); }
+.ec-send{ position:relative; width:34px; height:34px; flex:none; display:grid; place-items:center; padding:0; border:0; border-radius:12px; background:var(--ec-accent); color:var(--ec-on-accent); cursor:pointer; opacity:.35; transform:scale(.92); transition:opacity .2s,background .18s,transform .22s cubic-bezier(.3,1.5,.4,1),box-shadow .2s; }
+.ec-send.is-ready{ opacity:1; transform:scale(1); box-shadow:0 8px 18px -8px color-mix(in srgb,var(--ec-accent) 60%,transparent); }
+.ec-send.is-ready:hover{ background:var(--ec-accent-hover); transform:scale(1.04); box-shadow:0 12px 24px -10px color-mix(in srgb,var(--ec-accent) 70%,transparent); }
+.ec-send.is-ready:active{ transform:scale(.96); }
 .ec-send:disabled{ opacity:.3; cursor:default; }
-.ec-send .ec-i{ width:17px; height:17px; stroke-width:2.3; }
+.ec-send .ec-i{ width:17px; height:17px; stroke-width:2.4; transition:transform .25s cubic-bezier(.3,1.5,.4,1); }
+.ec-send.is-ready .ec-i{ transform:translateY(-1px); }
 .ec-attachments{ display:flex; flex-wrap:wrap; gap:8px; padding:2px 0 8px; }
 .ec-att{ position:relative; display:flex; align-items:center; gap:9px; max-width:230px; height:52px; padding:0 30px 0 8px; border:1px solid var(--ec-line); border-radius:12px; background:var(--ec-raised-2); }
 .ec-att-ext{ flex:none; width:36px; height:36px; display:grid; place-items:center; border-radius:8px; background:var(--ec-accent-soft); color:var(--ec-accent); font:700 10px var(--ec-font); letter-spacing:.04em; }
@@ -2133,16 +2136,19 @@ body.is-authenticated .ec-auth{ display:none; }
 .ec-att-img img{ width:100%; height:100%; object-fit:cover; }
 .ec-att button{ position:absolute; top:4px; right:4px; width:20px; height:20px; padding:0; border:0; border-radius:50%; background:var(--ec-text); color:var(--ec-bg); font:600 14px/20px var(--ec-font); cursor:pointer; }
 .ec-suggest{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:14px; }
-.ec-chip{ display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 13px; border:1px solid var(--ec-line); border-radius:10px; background:transparent; color:var(--ec-text-2); font:14px var(--ec-font); cursor:pointer; }
-.ec-chip:hover{ background:var(--ec-hover); border-color:var(--ec-line-2); color:var(--ec-text); }
-.ec-chip .ec-i{ width:16px; height:16px; }
+.ec-chip{ display:inline-flex; align-items:center; gap:7px; height:36px; padding:0 14px; border:1px solid var(--ec-line); border-radius:999px; background:transparent; color:var(--ec-text-2); font:550 13.5px var(--ec-font); cursor:pointer; transition:transform .15s,background .18s,border-color .18s,color .18s; }
+.ec-chip:hover{ background:var(--ec-hover); border-color:var(--ec-line-2); color:var(--ec-text); transform:translateY(-1px); }
+.ec-chip:active{ transform:translateY(0); }
+.ec-chip .ec-i{ width:15px; height:15px; color:var(--ec-text-3); transition:color .18s; }
+.ec-chip:hover .ec-i{ color:var(--ec-text); }
 .ec-foot{ margin:8px auto 0; font-size:12px; text-align:center; color:var(--ec-text-3); }
 
 /* ---------- messages ---------- */
 .ec-msg{ display:flex; flex-direction:column; min-width:0; animation:ec-in .24s ease both; }
 .ec-msg.is-user{ align-items:flex-end; }
 .ec-msg-text{ min-width:0; overflow-wrap:break-word; }
-.ec-msg.is-user .ec-msg-text{ max-width:min(85%,620px); padding:10px 16px; border-radius:18px; background:var(--ec-user); overflow-wrap:anywhere; }
+.ec-msg.is-user .ec-msg-text{ max-width:min(85%,620px); padding:11px 16px 12px; border-radius:20px 20px 6px 20px; background:var(--ec-user); overflow-wrap:anywhere; box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 24px -14px rgba(0,0,0,.5); }
+.ec-msg.is-user .ec-msg-files{ max-width:min(85%,620px); margin-left:auto; }
 html.high-contrast .ec-msg.is-user .ec-msg-text{ box-shadow:inset 0 0 0 1px var(--ec-line-2); }
 .ec-msg-text>:first-child{ margin-top:0; }
 .ec-msg-text>:last-child{ margin-bottom:0; }
@@ -2169,8 +2175,9 @@ html.high-contrast .ec-msg.is-user .ec-msg-text{ box-shadow:inset 0 0 0 1px var(
 .ec-actions{ display:flex; align-items:center; gap:2px; margin:6px 0 0 -6px; opacity:0; transition:opacity .15s; }
 .ec-msg.is-ai:hover .ec-actions,.ec-msg.is-ai:last-child .ec-actions,.ec-actions:focus-within{ opacity:1; }
 @media (hover:none){ .ec-actions{ opacity:1; } }
-.ec-act,#page-chat .ec-actions [data-workspace-save-message]{ width:30px; height:30px; display:grid; place-items:center; padding:0; border:0; border-radius:8px; background:transparent; color:var(--ec-text-3); cursor:pointer; }
+.ec-act,#page-chat .ec-actions [data-workspace-save-message]{ width:32px; height:32px; display:grid; place-items:center; padding:0; border:0; border-radius:9px; background:transparent; color:var(--ec-text-3); cursor:pointer; transition:background .15s,color .15s,transform .15s; }
 .ec-act:hover,#page-chat .ec-actions [data-workspace-save-message]:hover{ background:var(--ec-hover); color:var(--ec-text); }
+.ec-act:active{ transform:scale(.92); }
 .ec-act.is-selected{ color:var(--ec-accent); }
 .ec-act .ec-i,.ec-actions [data-workspace-save-message] .ec-i{ width:16px; height:16px; }
 .ec-steps{ margin-bottom:8px; font-family:var(--ec-font); }
@@ -3226,7 +3233,7 @@ html.ec-compact .ec-msg.is-user .ec-msg-text{ padding:7px 13px; }
 .nav-links button:hover{ color:#fff!important; }
 .nav-links button:hover .nav-ico{ transform:translateY(-1px) scale(1.08); }
 .nav-links button.is-active{ color:#fff!important; }
-.nav-ico{ width:15px; height:15px; flex:none; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; opacity:.8; transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .2s,color .2s; }
+.nav-ico{ width:16px; height:16px; flex:none; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; opacity:.85; transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .2s,color .2s; }
 .nav-links button.is-active .nav-ico{ opacity:1; color:#c4c4c4; }
 .nav-pill{ top:5px!important; height:38px!important; overflow:hidden; border-radius:999px!important;
   background:radial-gradient(ellipse 120% 90% at 50% -20%,rgba(255,255,255,.2),transparent 55%),linear-gradient(180deg,#3a3a3a 0%,#1c1c1c 60%,#111 100%)!important;
@@ -3906,7 +3913,7 @@ html.reduce-motion .plan.premium::before,html.reduce-motion .plan.premium::after
 .nav-links button:hover{ background:rgba(255,255,255,.08)!important; border-color:rgba(255,255,255,.22)!important; transform:translateY(-1px); }
 .nav-links button.is-active{ background:#f5f5f5!important; border-color:#f5f5f5!important; color:#0b0b0b!important; }
 .nav-links button{ display:inline-flex!important; align-items:center; gap:7px; }
-.nav-links .nav-ico{ display:block!important; width:16px!important; height:16px!important; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; opacity:.85; }
+.nav-links .nav-ico{ display:block!important; width:16px!important; height:16px!important; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; opacity:.85; }
 .nav-links button.is-active .nav-ico{ opacity:1; }
 .nav-actions .btn{ height:40px; padding:0 18px; border-radius:999px; font:600 14px var(--font-body); }
 .nav-actions #openSignIn{ border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.035); color:#e9e9e9; }
@@ -4821,49 +4828,49 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
     <!-- Line icons used across the chat + settings (referenced with <use href="#i-…">) -->
     <svg class="ec-sprite" aria-hidden="true" focusable="false">
       <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
-      <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
-      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+      <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol>
       <symbol id="i-artifact" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="3.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M17 13.5v7M13.5 17h7"/></symbol>
-      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9"/><circle cx="4.8" cy="12" r=".9"/><circle cx="4.8" cy="17.5" r=".9"/></symbol><symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M5 17a7 7 0 0 1 14 0M3 20h18M12 3v3M4.9 8.9l1.6 1.6M19.1 8.9l-1.6 1.6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-news" viewBox="0 0 24 24"><path d="M5 5h11v14H6.5A1.5 1.5 0 0 1 5 17.5z"/><path d="M16 9h3v8.5a1.5 1.5 0 0 1-3 0M8 9h5M8 12.5h5M8 16h3"/></symbol><symbol id="i-binoculars" viewBox="0 0 24 24"><circle cx="7" cy="16" r="3.5"/><circle cx="17" cy="16" r="3.5"/><path d="M10.5 16h3M5 12.5 7 5h3l.5 7.5M19 12.5 17 5h-3l-.5 7.5"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 4l3 3-3 3M4 11V9.5A2.5 2.5 0 0 1 6.5 7H20M7 20l-3-3 3-3M20 13v1.5A2.5 2.5 0 0 1 17.5 17H4"/></symbol><symbol id="i-wand" viewBox="0 0 24 24"><path d="m4 20 11-11M14 4v2M19 9h2M18 5l-1.5 1.5M10 5l1 1M18 13l1 1"/></symbol><symbol id="i-slides" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="12" rx="2"/><path d="M12 17v3M8.5 20h7M7 9h6M7 12h4"/></symbol><symbol id="i-window" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 9h17M6.5 6.8h.01M9 6.8h.01"/></symbol><symbol id="i-feedback" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-8l-4 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path d="M8.5 10.5h7"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
-      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9"/><circle cx="4.8" cy="12" r=".9"/><circle cx="4.8" cy="17.5" r=".9"/></symbol><symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M5 17a7 7 0 0 1 14 0M3 20h18M12 3v3M4.9 8.9l1.6 1.6M19.1 8.9l-1.6 1.6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-news" viewBox="0 0 24 24"><path d="M5 5h11v14H6.5A1.5 1.5 0 0 1 5 17.5z"/><path d="M16 9h3v8.5a1.5 1.5 0 0 1-3 0M8 9h5M8 12.5h5M8 16h3"/></symbol><symbol id="i-binoculars" viewBox="0 0 24 24"><circle cx="7" cy="16" r="3.5"/><circle cx="17" cy="16" r="3.5"/><path d="M10.5 16h3M5 12.5 7 5h3l.5 7.5M19 12.5 17 5h-3l-.5 7.5"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 4l3 3-3 3M4 11V9.5A2.5 2.5 0 0 1 6.5 7H20M7 20l-3-3 3-3M20 13v1.5A2.5 2.5 0 0 1 17.5 17H4"/></symbol><symbol id="i-wand" viewBox="0 0 24 24"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M15 9h.01"/><path d="M17.8 6.2 19 5"/><path d="m3 21 9-9"/><path d="M12.2 6.2 11 5"/></symbol><symbol id="i-slides" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="12" rx="2"/><path d="M12 17v3M8.5 20h7M7 9h6M7 12h4"/></symbol><symbol id="i-window" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 9h17M6.5 6.8h.01M9 6.8h.01"/></symbol><symbol id="i-feedback" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-8l-4 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path d="M8.5 10.5h7"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></symbol>
       <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
       <!-- ======== Lucide-style icon set (24px grid, 2px stroke, round caps/joins) ======== -->
       <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
       <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
       <symbol id="i-chevrons" viewBox="0 0 24 24"><path d="m8 9.5 4-4 4 4M8 14.5l4 4 4-4"/></symbol>
-      <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
       <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></symbol>
-      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.6 3.5 5.4 3.5 8.5s-1.1 5.9-3.5 8.5c-2.4-2.6-3.5-5.4-3.5-8.5s1.1-5.9 3.5-8.5z"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
       <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></symbol>
-      <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="m12 13 3.5-4"/></symbol>
-      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17h.01"/></symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
       <symbol id="i-up-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 3.5-3.5 3.5 3.5M12 8.5V16"/></symbol>
       <symbol id="i-login" viewBox="0 0 24 24"><path d="M14 4h3.5A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5H14M10 16l4-4-4-4M14 12H4"/></symbol>
       <symbol id="i-logout" viewBox="0 0 24 24"><path d="M10 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20H10M15 16l4-4-4-4M19 12H9"/></symbol>
       <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></symbol>
-      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol>
       <symbol id="i-eraser" viewBox="0 0 24 24"><path d="m7 20-3.5-3.5L14 6a2 2 0 0 1 2.8 0l3.2 3.2a2 2 0 0 1 0 2.8L12 20zM9 10.5l5 5M7 20h13"/></symbol>
-      <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="m20 11.5-8.3 8.3a5 5 0 0 1-7.1-7.1l8.6-8.6a3.4 3.4 0 0 1 4.8 4.8l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></symbol>
-      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></symbol>
-      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
-      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+      <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></symbol>
       <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V6A2.5 2.5 0 0 0 13 3.5H6A2.5 2.5 0 0 0 3.5 6v7A2.5 2.5 0 0 0 6 15.5h2.5"/></symbol>
       <symbol id="i-thumb-up" viewBox="0 0 24 24"><path d="M7 10v10H4.5A1.5 1.5 0 0 1 3 18.5v-7A1.5 1.5 0 0 1 4.5 10zM7 10l4-7a2.5 2.5 0 0 1 2.5 2.5V9h5.2a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.5 20H7"/></symbol>
       <symbol id="i-thumb-down" viewBox="0 0 24 24"><path d="M17 14V4h2.5A1.5 1.5 0 0 1 21 5.5v7a1.5 1.5 0 0 1-1.5 1.5zM17 14l-4 7a2.5 2.5 0 0 1-2.5-2.5V15H5.3a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.5 4H17"/></symbol>
       <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z"/></symbol>
       <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
       <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
-      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 5 6v5.5c0 4.3 3 7.8 7 9 4-1.2 7-4.7 7-9V6z"/></symbol>
-      <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+      <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
       <symbol id="i-spark" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
-      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5zM3 13l9 5 9-5"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
       <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
       <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
-      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17z"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
       <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2.5 9.5 9.5-5 9.5 5-9.5 5zM6.5 11.6V16c1.5 1.5 3.5 2.5 5.5 2.5s4-1 5.5-2.5v-4.4M21.5 9.5V15"/></symbol>
-      <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
       <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="9.6" r="1.7"/><path d="m4 17.2 4.6-4.6a1.6 1.6 0 0 1 2.2 0l2.4 2.4M12.4 14.2l1.9-1.9a1.6 1.6 0 0 1 2.2 0l3.5 3.5"/></symbol>
       <symbol id="i-film" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M7.5 5v14M16.5 5v14M3.5 9.7h4M3.5 14.3h4M16.5 9.7h4M16.5 14.3h4"/></symbol>
       <symbol id="i-poster" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 13.5h7M8.5 16.5h4.5"/><path d="M8.5 10.2 10.6 7.6l1.6 1.8 1.2-1.2 2.1 2"/></symbol>
@@ -4875,12 +4882,12 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-agent" viewBox="0 0 24 24"><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2"/><circle cx="12" cy="12" r="5.6"/><path d="m12 9.2 1 1.8 1.8 1-1.8 1-1 1.8-1-1.8-1.8-1 1.8-1z"/></symbol>
       <symbol id="i-brain" viewBox="0 0 32 32"><path d="M16 6.6C14.6 5 12 5 10.9 6.6 8.9 6.3 7.2 7.9 7.4 9.9 5.6 10.6 4.9 12.8 5.9 14.4c-1.3 1.2-1.3 3.5.1 4.6-.6 2 .8 4 2.8 4.1.6 1.9 2.6 2.9 4.4 2.2.8 1 2 1.3 2.8.9M16 6.6c1.4-1.6 4-1.6 5.1 0 2-.3 3.7 1.3 3.5 3.3 1.8.7 2.5 2.9 1.5 4.5 1.3 1.2 1.3 3.5-.1 4.6.6 2-.8 4-2.8 4.1-.6 1.9-2.6 2.9-4.4 2.2-.8 1-2 1.3-2.8.9M16 6.6v19.6"/><path d="M10.9 6.6c.7 1.6 2.5 2 3.3 3.4M7.4 9.9c1.2.7 2 1.9 1.8 3.3M5.9 14.4c1.7-.2 3.7.6 4.5 2.2M6 19c1.6-.4 3.4.2 4.2 1.6M8.8 23.1c1-1.3 3-1.5 4.2-.7M21.1 6.6c-.7 1.6-2.5 2-3.3 3.4M24.6 9.9c-1.2.7-2 1.9-1.8 3.3M26.1 14.4c-1.7-.2-3.7.6-4.5 2.2M26 19c-1.6-.4-3.4.2-4.2 1.6M23.2 23.1c-1-1.3-3-1.5-4.2-.7"/></symbol>
       <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 8h14M5 8l-2.5 6a2.8 2.8 0 0 0 5 0zM19 8l-2.5 6a2.8 2.8 0 0 0 5 0z"/></symbol>
-      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 19V6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v7a2.5 2.5 0 0 1-2.5 2.5H8.5z"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
       <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/></symbol>
-      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4.5V9h-4.5"/></symbol>
-      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9.5 4h5l-.8 5.5 3.3 3.3H7l3.3-3.3zM12 12.8V20"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></symbol>
       <symbol id="i-bug" viewBox="0 0 24 24"><rect x="7" y="8" width="10" height="11" rx="5"/><path d="M9.5 8a2.5 2.5 0 0 1 5 0M3.5 13H7M17 13h3.5M4.5 8.5 7.5 10M19.5 8.5 16.5 10M4.5 18l3-1.5M19.5 18l-3-1.5"/></symbol>
-      <symbol id="i-check-list" viewBox="0 0 24 24"><path d="m4 7 2 2 3.5-3.5M4 15l2 2 3.5-3.5M13 8h7M13 16h7"/></symbol>
+      <symbol id="i-check-list" viewBox="0 0 24 24"><polyline points="3 17 5 19 9 15"/><polyline points="3 7 5 9 9 5"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="12" x2="21" y2="12"/><line x1="13" y1="18" x2="21" y2="18"/></symbol>
       <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
       <symbol id="i-bell-ring" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/><path d="M22 8c0-2.3-.8-4.3-2-6"/></symbol>
       <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"/></symbol>
@@ -4892,29 +4899,29 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
       <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
       <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></symbol>
-      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
       <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20z"/><path d="M14 3.5V8h4"/></symbol>
-      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></symbol>
-      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
-      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
-      <symbol id="i-forward" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+      <symbol id="i-forward" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
       <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></symbol>
       <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
-      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13l11-6.5z"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
       <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
       <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="2" y1="2" x2="22" y2="22"/></symbol>
       <symbol id="i-zip" viewBox="0 0 24 24"><path d="M7.5 3.5H14l4.5 4.5v11.5a1 1 0 0 1-1 1h-10a1.5 1.5 0 0 1-1.5-1.5V5a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M11 3.5v2m0 2v2m0 2v2m-1 0h2v3h-2z"/></symbol>
       <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/></symbol>
       <symbol id="i-chats" viewBox="0 0 24 24"><path d="M15.5 9.5V6a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v5.5a2 2 0 0 0 2 2H6v2.6l3-2.6"/><path d="M10.5 11.5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2h-1v2.5L15 18h-2.5a2 2 0 0 1-2-2z"/></symbol>
       <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
-      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
       <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.5 3.5h5M10 3.5v5.2L5 18a1.8 1.8 0 0 0 1.6 2.5h10.8A1.8 1.8 0 0 0 19 18l-5-9.3V3.5"/><path d="M7.4 14h9.2"/></symbol>
-      <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="m7.5 9.5 3 2.5-3 2.5M12.5 15h4"/></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
       <symbol id="i-access" viewBox="0 0 24 24"><circle cx="12" cy="4.8" r="1.6"/><path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5m0 0-3 6m3-6 3 6"/></symbol>
-      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
-      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7.5 3.5H14l4.5 4.5v11.5a1 1 0 0 1-1 1h-10a1.5 1.5 0 0 1-1.5-1.5V5a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h6"/></symbol>
-      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></symbol>
-      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
     </svg>
 
 <div class="atmosphere">
