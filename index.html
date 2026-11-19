@@ -1086,7 +1086,8 @@ body.chat-mode{ overflow:hidden; height:100vh; }
   align-items:center; justify-content:center;
   padding:20px;
 }
-.modal-overlay.is-open{ display:flex; }
+.modal-overlay.is-open{ display:flex; animation:auth-fade .22s ease both; }
+@keyframes auth-fade{ from{ opacity:0; } }
 .modal-card{
   width:100%; max-width:420px;
   background:linear-gradient(180deg, #181818, #100f12);
@@ -1096,46 +1097,159 @@ body.chat-mode{ overflow:hidden; height:100vh; }
   position:relative;
   box-shadow:0 40px 100px rgba(0,0,0,0.6);
 }
-.modal-close{
-  position:absolute; top:18px; right:18px;
-  width:32px; height:32px; border-radius:9px;
-  border:1px solid var(--line); background:rgba(255,255,255,0.03);
-  display:flex; align-items:center; justify-content:center;
-  color:var(--text-2); font-size:1rem;
-}
-.modal-close:hover{ color:var(--text-1); }
-.modal-head{ text-align:center; margin-bottom:26px; }
-.modal-head img{ width:36px; margin:0 auto 14px; }
-.modal-head h3{ font-size:1.35rem; color:var(--text-1); }
-.modal-head p{ color:var(--text-3); font-size:0.88rem; margin-top:6px; }
 
-.social-row{ display:flex; flex-direction:column; gap:10px; }
+/* ================ AUTH CARD (polished sign-in / sign-up) ================ */
+.auth-card{
+  max-width:880px; padding:0;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  background:linear-gradient(180deg,#141416 0%,#0b0b0d 100%);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  box-shadow:0 60px 140px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.04);
+  overflow:hidden;
+  animation:auth-rise .32s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes auth-rise{ from{ opacity:0; transform:translateY(14px) scale(.985); } }
+.auth-card .modal-close{
+  position:absolute; top:16px; right:16px; z-index:3;
+  width:34px; height:34px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(12,12,14,.55);
+  color:var(--text-2);
+  backdrop-filter:blur(8px);
+  display:grid; place-items:center;
+  transition:color .18s,background .18s,border-color .18s;
+}
+.auth-card .modal-close:hover{ color:var(--text-1); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.2); }
+.auth-card .modal-close .ec-i{ width:16px; height:16px; }
+
+/* ---- Left: brand side ---- */
+.auth-aside{
+  position:relative; padding:34px 32px 36px;
+  background:
+    radial-gradient(70% 55% at 20% 20%,rgba(76,175,110,.18),rgba(76,175,110,0) 60%),
+    radial-gradient(90% 70% at 90% 90%,rgba(80,120,255,.14),rgba(80,120,255,0) 60%),
+    linear-gradient(180deg,#121214,#070708);
+  overflow:hidden;
+  display:flex; flex-direction:column; justify-content:space-between;
+  min-height:520px;
+}
+.auth-aside::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(transparent 0 97%,rgba(255,255,255,.04) 97%) 0 0/36px 36px,
+    linear-gradient(90deg,transparent 0 97%,rgba(255,255,255,.04) 97%) 0 0/36px 36px;
+  mask-image:radial-gradient(70% 55% at 30% 40%,#000,transparent 85%);
+}
+.auth-aside-brand{
+  position:relative; z-index:2; display:inline-flex; align-items:center; gap:12px;
+  color:var(--text-1); font:800 1.12rem/1 var(--font-body); letter-spacing:-.02em;
+}
+.auth-aside-brand img{ width:36px; height:36px; border-radius:10px; }
+.auth-glow{
+  position:absolute; left:-20%; top:40%; width:140%; height:60%;
+  background:radial-gradient(60% 60% at 50% 50%,rgba(76,175,110,.35),rgba(76,175,110,0) 65%);
+  filter:blur(40px); animation:auth-glow 8s ease-in-out infinite alternate;
+}
+@keyframes auth-glow{ from{ transform:translate(-4%,-4%) scale(1); opacity:.7; } to{ transform:translate(4%,4%) scale(1.1); opacity:1; } }
+.auth-stars{ position:absolute; inset:0; pointer-events:none; }
+.auth-stars i{ position:absolute; left:var(--x); top:var(--y); width:3px; height:3px; border-radius:50%; background:#fff; opacity:.6; box-shadow:0 0 6px rgba(255,255,255,.7); animation:auth-twinkle 2.4s ease-in-out infinite; animation-delay:var(--d); }
+@keyframes auth-twinkle{ 0%,100%{ opacity:.25; transform:scale(.85); } 50%{ opacity:1; transform:scale(1.2); } }
+.auth-aside-copy{ position:relative; z-index:2; }
+.auth-aside-copy h2{
+  font-family:var(--font-body); font-weight:800; font-size:1.65rem; line-height:1.15;
+  letter-spacing:-.035em; color:var(--text-1); margin:0 0 10px;
+}
+.auth-aside-copy p{ color:var(--text-2); font-size:.92rem; line-height:1.55; margin:0 0 20px; max-width:30ch; }
+.auth-promises{ list-style:none; padding:0; margin:0; display:grid; gap:11px; }
+.auth-promises li{ display:flex; align-items:center; gap:11px; color:var(--text-2); font-size:.86rem; line-height:1.4; }
+.auth-promises .ec-i{ flex:none; width:16px; height:16px; color:#4caf6e; }
+
+/* ---- Right: form side ---- */
+.auth-form{ position:relative; padding:40px 40px 32px; display:flex; flex-direction:column; justify-content:center; min-width:0; }
+.auth-head{ margin-bottom:22px; }
+.auth-head h3{ font-family:var(--font-body); font-weight:800; font-size:1.55rem; letter-spacing:-.025em; color:var(--text-1); margin:0 0 6px; }
+.auth-head p{ color:var(--text-3); font-size:.88rem; margin:0; }
+
+.social-row{ display:grid; gap:10px; }
 .social-btn{
   display:flex; align-items:center; justify-content:center; gap:10px;
-  padding:11px; border-radius:12px;
-  border:1px solid var(--line);
+  padding:11px 14px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,0.03);
-  color:var(--text-1); font-weight:700; font-size:0.88rem;
+  color:var(--text-1); font-weight:650; font-size:.9rem;
+  cursor:pointer;
 }
-.social-btn:hover{ background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.2); }
-.social-btn svg{ width:18px; height:18px; }
+.social-btn:hover{ background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.18); }
+.social-btn svg{ width:18px; height:18px; flex:none; }
+.social-btn span{ min-width:0; }
 
 .divider-row{ display:flex; align-items:center; gap:12px; margin:22px 0; }
-.divider-row::before, .divider-row::after{ content:""; flex:1; height:1px; background:var(--line); }
-.divider-row span{ color:var(--text-3); font-size:0.76rem; font-weight:600; }
+.divider-row::before, .divider-row::after{ content:""; flex:1; height:1px; background:rgba(255,255,255,.08); }
+.divider-row span{ color:var(--text-3); font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
 
 .field{ margin-bottom:14px; }
-.field label{ display:block; font-size:0.8rem; font-weight:700; color:var(--text-2); margin-bottom:6px; }
+.field label{ display:block; font-size:.78rem; font-weight:650; color:var(--text-2); margin-bottom:6px; letter-spacing:.01em; }
 .field input{
   width:100%; padding:11px 14px; border-radius:11px;
-  background:rgba(255,255,255,0.03); border:1px solid var(--line);
-  color:var(--text-1); font-size:0.92rem; font-family:inherit;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,.1);
+  color:var(--text-1); font-size:.92rem; font-family:inherit; line-height:1.4;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
 }
-.field input:focus{ outline:none; border-color:rgba(199,199,199,0.5); }
-.modal-foot{ text-align:center; margin-top:18px; font-size:0.86rem; color:var(--text-3); }
-.modal-foot button{ background:none; border:none; color:var(--red-300); font-weight:700; font-size:0.86rem; }
-.modal-fineprint{ text-align:center; font-size:0.74rem; color:var(--text-3); margin-top:16px; line-height:1.6; }
-.modal-fineprint a{ color:var(--text-2); text-decoration:underline; text-underline-offset:2px; }
+.field input::placeholder{ color:var(--text-3); }
+.field input:focus{ outline:none; border-color:rgba(76,175,110,.45); background:rgba(255,255,255,.05); box-shadow:0 0 0 3px rgba(76,175,110,.12); }
+.field-ico .field-wrap{ position:relative; }
+.field-ico .field-lead{ position:absolute; left:13px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-3); pointer-events:none; transition:color .18s ease; }
+.field-ico input{ padding-left:40px; }
+.field-ico input:focus ~ .field-reveal,
+.field-ico .field-wrap:focus-within .field-lead{ color:var(--text-1); }
+.field-reveal{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  width:30px; height:30px; display:grid; place-items:center;
+  padding:0; border:0; border-radius:8px;
+  background:transparent; color:var(--text-3); cursor:pointer;
+}
+.field-reveal:hover{ background:rgba(255,255,255,.06); color:var(--text-1); }
+.field-reveal .ec-i{ width:16px; height:16px; }
+.field-reveal .ec-i[hidden]{ display:none; }
+
+.auth-error{ color:#ff8a8a; font-size:.82rem; margin:-4px 0 10px; display:flex; align-items:center; gap:6px; }
+.auth-error[hidden]{ display:none; }
+.auth-error::before{ content:""; width:4px; height:4px; border-radius:50%; background:currentColor; }
+
+.auth-submit{
+  margin-top:6px; height:46px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:linear-gradient(180deg,#fff 0%,#dcdcdc 100%); color:#0b0b0b;
+  border:0; border-radius:12px; font:700 .95rem var(--font-body);
+  box-shadow:0 10px 24px -14px rgba(255,255,255,.4);
+  transition:transform .14s,box-shadow .2s,filter .2s;
+}
+.auth-submit:hover{ filter:brightness(1.05); box-shadow:0 14px 30px -14px rgba(255,255,255,.55); }
+.auth-submit:active{ transform:translateY(1px); }
+.auth-submit .ec-i{ width:16px; height:16px; transition:transform .2s ease; }
+.auth-submit:hover .ec-i{ transform:translateX(2px); }
+.auth-submit[disabled]{ opacity:.65; cursor:wait; }
+
+.modal-foot{ text-align:center; margin-top:18px; font-size:.86rem; color:var(--text-3); }
+.modal-foot button{ background:none; border:none; color:var(--text-1); font-weight:700; font-size:.86rem; cursor:pointer; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(255,255,255,.3); }
+.modal-foot button:hover{ text-decoration-color:currentColor; }
+.modal-fineprint{ text-align:center; font-size:.72rem; color:var(--text-3); margin-top:16px; line-height:1.55; }
+.modal-fineprint a{ color:var(--text-2); text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
+
+@media (max-width:760px){
+  .auth-card{ grid-template-columns:1fr; max-width:460px; }
+  .auth-aside{ min-height:0; padding:28px 28px 22px; }
+  .auth-aside-brand{ margin-bottom:18px; }
+  .auth-aside-copy h2{ font-size:1.3rem; }
+  .auth-aside-copy p{ margin-bottom:14px; }
+  .auth-promises{ display:none; }
+  .auth-form{ padding:26px 26px 24px; }
+}
+@media (max-width:420px){
+  .auth-aside{ padding:22px 22px 18px; }
+  .auth-aside-copy h2{ font-size:1.15rem; }
+  .auth-form{ padding:22px; }
+}
 
 /* toast */
 .toast{
@@ -1867,7 +1981,7 @@ html[data-ec-width="wide"]{ --ec-col:960px; }
 .ec-sprite{ position:absolute; width:0; height:0; overflow:hidden; }
 #page-chat [hidden],.es-overlay [hidden]{ display:none!important; }
 .ec-msg-text h1,.ec-msg-text h2,.ec-msg-text h3,.ec-msg-text h4{ font-family:inherit; color:inherit; letter-spacing:normal; }
-.ec-i{ width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.ec-i{ width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
 /* ---------- app frame ---------- */
 #page-chat .ec-app{ flex:1; display:flex; width:100%; height:100vh; height:100dvh; overflow:hidden; background:var(--ec-bg); color:var(--ec-text); font-family:var(--ec-font); color-scheme:dark; }
@@ -4714,13 +4828,14 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.8" cy="6.5" r=".9"/><circle cx="4.8" cy="12" r=".9"/><circle cx="4.8" cy="17.5" r=".9"/></symbol><symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M5 17a7 7 0 0 1 14 0M3 20h18M12 3v3M4.9 8.9l1.6 1.6M19.1 8.9l-1.6 1.6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-news" viewBox="0 0 24 24"><path d="M5 5h11v14H6.5A1.5 1.5 0 0 1 5 17.5z"/><path d="M16 9h3v8.5a1.5 1.5 0 0 1-3 0M8 9h5M8 12.5h5M8 16h3"/></symbol><symbol id="i-binoculars" viewBox="0 0 24 24"><circle cx="7" cy="16" r="3.5"/><circle cx="17" cy="16" r="3.5"/><path d="M10.5 16h3M5 12.5 7 5h3l.5 7.5M19 12.5 17 5h-3l-.5 7.5"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 4l3 3-3 3M4 11V9.5A2.5 2.5 0 0 1 6.5 7H20M7 20l-3-3 3-3M20 13v1.5A2.5 2.5 0 0 1 17.5 17H4"/></symbol><symbol id="i-wand" viewBox="0 0 24 24"><path d="m4 20 11-11M14 4v2M19 9h2M18 5l-1.5 1.5M10 5l1 1M18 13l1 1"/></symbol><symbol id="i-slides" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="12" rx="2"/><path d="M12 17v3M8.5 20h7M7 9h6M7 12h4"/></symbol><symbol id="i-window" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 9h17M6.5 6.8h.01M9 6.8h.01"/></symbol><symbol id="i-feedback" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-8l-4 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path d="M8.5 10.5h7"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
       <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
       <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
-      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
-      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m10 7 5 5-5 5"/></symbol>
+      <!-- ======== Lucide-style icon set (24px grid, 2px stroke, round caps/joins) ======== -->
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
       <symbol id="i-chevrons" viewBox="0 0 24 24"><path d="m8 9.5 4-4 4 4M8 14.5l4 4 4-4"/></symbol>
       <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></symbol>
       <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0zM12 16v5"/></symbol>
       <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.6 3.5 5.4 3.5 8.5s-1.1 5.9-3.5 8.5c-2.4-2.6-3.5-5.4-3.5-8.5s1.1-5.9 3.5-8.5z"/></symbol>
-      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></symbol>
       <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="m12 13 3.5-4"/></symbol>
       <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17h.01"/></symbol>
       <symbol id="i-up-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12 3.5-3.5 3.5 3.5M12 8.5V16"/></symbol>
@@ -4737,11 +4852,11 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-thumb-up" viewBox="0 0 24 24"><path d="M7 10v10H4.5A1.5 1.5 0 0 1 3 18.5v-7A1.5 1.5 0 0 1 4.5 10zM7 10l4-7a2.5 2.5 0 0 1 2.5 2.5V9h5.2a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.5 20H7"/></symbol>
       <symbol id="i-thumb-down" viewBox="0 0 24 24"><path d="M17 14V4h2.5A1.5 1.5 0 0 1 21 5.5v7a1.5 1.5 0 0 1-1.5 1.5zM17 14l-4 7a2.5 2.5 0 0 1-2.5-2.5V15H5.3a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.5 4H17"/></symbol>
       <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z"/></symbol>
-      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
       <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 5 6v5.5c0 4.3 3 7.8 7 9 4-1.2 7-4.7 7-9V6z"/></symbol>
       <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/></symbol>
-      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5 13.9 9l5.6 2-5.6 2-1.9 5.5-1.9-5.5-5.6-2 5.6-2z"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
       <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5zM3 13l9 5 9-5"/></symbol>
       <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
@@ -4756,7 +4871,7 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3.5" y="4" width="6.5" height="5" rx="1.4"/><rect x="14" y="4" width="6.5" height="5" rx="1.4"/><rect x="8.75" y="15" width="6.5" height="5" rx="1.4"/><path d="M6.75 9v2.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5V9M12 13v2"/></symbol>
       <symbol id="i-ratio" viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M7 9.5v-1h2M17 14.5v1h-2"/></symbol>
       <symbol id="i-coin" viewBox="0 0 24 24"><ellipse cx="10" cy="8" rx="6" ry="3"/><path d="M4 8v4c0 1.7 2.7 3 6 3s6-1.3 6-3V8"/><path d="M8.5 14.8V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-4c0-1.6-2.3-2.8-5.4-3"/></symbol>
-      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.9-.8 1.9-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8h2.1a4.2 4.2 0 0 0 4.2-4.2C21 6.7 17 3.5 12 3.5z"/><circle cx="7.6" cy="11.2" r="1.1"/><circle cx="10.4" cy="7.5" r="1.1"/><circle cx="15" cy="7.6" r="1.1"/></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol>
       <symbol id="i-agent" viewBox="0 0 24 24"><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2"/><circle cx="12" cy="12" r="5.6"/><path d="m12 9.2 1 1.8 1.8 1-1.8 1-1 1.8-1-1.8-1.8-1 1.8-1z"/></symbol>
       <symbol id="i-brain" viewBox="0 0 32 32"><path d="M16 6.6C14.6 5 12 5 10.9 6.6 8.9 6.3 7.2 7.9 7.4 9.9 5.6 10.6 4.9 12.8 5.9 14.4c-1.3 1.2-1.3 3.5.1 4.6-.6 2 .8 4 2.8 4.1.6 1.9 2.6 2.9 4.4 2.2.8 1 2 1.3 2.8.9M16 6.6c1.4-1.6 4-1.6 5.1 0 2-.3 3.7 1.3 3.5 3.3 1.8.7 2.5 2.9 1.5 4.5 1.3 1.2 1.3 3.5-.1 4.6.6 2-.8 4-2.8 4.1-.6 1.9-2.6 2.9-4.4 2.2-.8 1-2 1.3-2.8.9M16 6.6v19.6"/><path d="M10.9 6.6c.7 1.6 2.5 2 3.3 3.4M7.4 9.9c1.2.7 2 1.9 1.8 3.3M5.9 14.4c1.7-.2 3.7.6 4.5 2.2M6 19c1.6-.4 3.4.2 4.2 1.6M8.8 23.1c1-1.3 3-1.5 4.2-.7M21.1 6.6c-.7 1.6-2.5 2-3.3 3.4M24.6 9.9c-1.2.7-2 1.9-1.8 3.3M26.1 14.4c-1.7-.2-3.7.6-4.5 2.2M26 19c-1.6-.4-3.4.2-4.2 1.6M23.2 23.1c-1-1.3-3-1.5-4.2-.7"/></symbol>
       <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 8h14M5 8l-2.5 6a2.8 2.8 0 0 0 5 0zM19 8l-2.5 6a2.8 2.8 0 0 0 5 0z"/></symbol>
@@ -4766,8 +4881,16 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9.5 4h5l-.8 5.5 3.3 3.3H7l3.3-3.3zM12 12.8V20"/></symbol>
       <symbol id="i-bug" viewBox="0 0 24 24"><rect x="7" y="8" width="10" height="11" rx="5"/><path d="M9.5 8a2.5 2.5 0 0 1 5 0M3.5 13H7M17 13h3.5M4.5 8.5 7.5 10M19.5 8.5 16.5 10M4.5 18l3-1.5M19.5 18l-3-1.5"/></symbol>
       <symbol id="i-check-list" viewBox="0 0 24 24"><path d="m4 7 2 2 3.5-3.5M4 15l2 2 3.5-3.5M13 8h7M13 16h7"/></symbol>
-      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></symbol>
-      <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+      <symbol id="i-bell-ring" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/><path d="M22 8c0-2.3-.8-4.3-2-6"/></symbol>
+      <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></symbol>
+      <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+      <symbol id="i-package" viewBox="0 0 24 24"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
       <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></symbol>
       <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
       <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20z"/><path d="M14 3.5V8h4"/></symbol>
@@ -4778,11 +4901,12 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></symbol>
       <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
       <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13l11-6.5z"/></symbol>
-      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="2" y1="2" x2="22" y2="22"/></symbol>
       <symbol id="i-zip" viewBox="0 0 24 24"><path d="M7.5 3.5H14l4.5 4.5v11.5a1 1 0 0 1-1 1h-10a1.5 1.5 0 0 1-1.5-1.5V5a1.5 1.5 0 0 1 1.5-1.5z"/><path d="M11 3.5v2m0 2v2m0 2v2m-1 0h2v3h-2z"/></symbol>
       <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/></symbol>
       <symbol id="i-chats" viewBox="0 0 24 24"><path d="M15.5 9.5V6a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v5.5a2 2 0 0 0 2 2H6v2.6l3-2.6"/><path d="M10.5 11.5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2h-1v2.5L15 18h-2.5a2 2 0 0 1-2-2z"/></symbol>
-      <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H14v-5.5h-4v5.5H5.5A1.5 1.5 0 0 1 4 19z"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
       <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
       <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.5 3.5h5M10 3.5v5.2L5 18a1.8 1.8 0 0 0 1.6 2.5h10.8A1.8 1.8 0 0 0 19 18l-5-9.3V3.5"/><path d="M7.4 14h9.2"/></symbol>
       <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="m7.5 9.5 3 2.5-3 2.5M12.5 15h4"/></symbol>
@@ -6345,48 +6469,92 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
 
 <!-- ============ AUTH MODAL ============ -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal-card">
-    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
-    <div class="modal-head">
-      <img src="assets/elorahub_logo.png" alt="elorahub">
-      <h3 id="modalTitle">Welcome back</h3>
-      <p id="modalSubtitle">Sign in to keep chatting with elora</p>
-    </div>
+  <div class="modal-card auth-card">
+    <button class="modal-close" id="modalClose" aria-label="Close"><svg class="ec-i" aria-hidden="true"><use href="#i-x"/></svg></button>
 
-    <div class="social-row">
-      <button class="social-btn" data-provider="Google">
-        <svg viewBox="0 0 24 24"><path fill="#fff" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6.2s2.7-6.2 6-6.2c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3 14.7 2 12 2 6.9 2 2.7 6.1 2.7 11.2S6.9 20.4 12 20.4c6.9 0 9.3-4.8 9.3-7.3 0-.5 0-.9-.1-1.3H12z"/><path fill="none" d="M0 0h24v24H0z"/></svg>
-        Continue with Google
-      </button>
-      <button class="social-btn" data-provider="GitHub">
-        <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.3-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.4.1-2.8 0 0 .8-.3 2.8 1 .8-.2 1.7-.3 2.5-.3.9 0 1.7.1 2.5.3 2-1.4 2.8-1 2.8-1 .5 1.4.2 2.5.1 2.8.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5 4-1.4 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2z"/></svg>
-        Continue with GitHub
-      </button>
-    </div>
-
-    <div class="divider-row"><span>or with email</span></div>
-
-    <form id="authForm">
-      <div class="field" id="nameField" style="display:none;">
-        <label for="authName">Name</label>
-        <input type="text" id="authName" placeholder="Your name">
+    <!-- Left side: brand + atmospheric visual -->
+    <aside class="auth-aside" aria-hidden="true">
+      <div class="auth-aside-brand">
+        <img src="assets/elorahub_logo.png" alt="">
+        <span>elorahub</span>
       </div>
-      <div class="field">
-        <label for="authEmail">Email</label>
-        <input type="email" id="authEmail" placeholder="you@email.com">
+      <div class="auth-glow"></div>
+      <div class="auth-stars">
+        <i style="--x:14%;--y:22%;--d:0s"></i>
+        <i style="--x:72%;--y:18%;--d:1.2s"></i>
+        <i style="--x:38%;--y:62%;--d:.7s"></i>
+        <i style="--x:86%;--y:74%;--d:2.1s"></i>
+        <i style="--x:20%;--y:82%;--d:1.6s"></i>
       </div>
-      <div class="field">
-        <label for="authPassword">Password</label>
-        <input type="password" id="authPassword" placeholder="••••••••">
+      <div class="auth-aside-copy">
+        <h2>Think it through, together.</h2>
+        <p>Your chats, projects and artifacts, saved to your account — ready on any device.</p>
+        <ul class="auth-promises">
+          <li><svg class="ec-i" aria-hidden="true"><use href="#i-sparkles"/></svg><span>Code, Studio, Agent — one assistant, four workspaces</span></li>
+          <li><svg class="ec-i" aria-hidden="true"><use href="#i-zap"/></svg><span>Live research, cited sources, real answers</span></li>
+          <li><svg class="ec-i" aria-hidden="true"><use href="#i-eye"/></svg><span>Private by design — your chats stay yours</span></li>
+        </ul>
       </div>
-      <p id="authError" style="color:var(--red-400);font-size:0.82rem;margin-bottom:10px;display:none;"></p>
-      <button type="submit" class="btn btn-primary btn-block" id="authSubmit" style="margin-top:6px;">Sign in</button>
-    </form>
+    </aside>
 
-    <div class="modal-foot" id="modalSwitch">
-      Don't have an account? <button id="switchToSignUp">Sign up</button>
+    <!-- Right side: the actual form -->
+    <div class="auth-form">
+      <div class="auth-head">
+        <h3 id="modalTitle">Welcome back</h3>
+        <p id="modalSubtitle">Sign in to keep chatting with elora</p>
+      </div>
+
+      <div class="social-row">
+        <button class="social-btn" data-provider="Google" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6.2s2.7-6.2 6-6.2c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3 14.7 2 12 2 6.9 2 2.7 6.1 2.7 11.2S6.9 20.4 12 20.4c6.9 0 9.3-4.8 9.3-7.3 0-.5 0-.9-.1-1.3H12z"/></svg>
+          <span>Continue with Google</span>
+        </button>
+        <button class="social-btn" data-provider="GitHub" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="#fff"><path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.3-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.4.1-2.8 0 0 .8-.3 2.8 1 .8-.2 1.7-.3 2.5-.3.9 0 1.7.1 2.5.3 2-1.4 2.8-1 2.8-1 .5 1.4.2 2.5.1 2.8.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5 4-1.4 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2z"/></svg>
+          <span>Continue with GitHub</span>
+        </button>
+      </div>
+
+      <div class="divider-row"><span>or with email</span></div>
+
+      <form id="authForm" autocomplete="on" novalidate>
+        <div class="field field-ico" id="nameField" style="display:none;">
+          <label for="authName">Name</label>
+          <div class="field-wrap">
+            <svg class="ec-i field-lead" aria-hidden="true"><use href="#i-user"/></svg>
+            <input type="text" id="authName" placeholder="Your name" autocomplete="name">
+          </div>
+        </div>
+        <div class="field field-ico">
+          <label for="authEmail">Email</label>
+          <div class="field-wrap">
+            <svg class="ec-i field-lead" aria-hidden="true"><use href="#i-mail"/></svg>
+            <input type="email" id="authEmail" placeholder="you@email.com" autocomplete="email" inputmode="email">
+          </div>
+        </div>
+        <div class="field field-ico">
+          <label for="authPassword">Password</label>
+          <div class="field-wrap">
+            <svg class="ec-i field-lead" aria-hidden="true"><use href="#i-lock"/></svg>
+            <input type="password" id="authPassword" placeholder="At least 6 characters" autocomplete="current-password">
+            <button type="button" class="field-reveal" id="authPasswordReveal" aria-label="Show password" aria-pressed="false">
+              <svg class="ec-i" aria-hidden="true" data-eye-on><use href="#i-eye"/></svg>
+              <svg class="ec-i" aria-hidden="true" data-eye-off hidden><use href="#i-eye-off"/></svg>
+            </button>
+          </div>
+        </div>
+        <p id="authError" class="auth-error" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block auth-submit" id="authSubmit">
+          <span class="auth-submit-label">Sign in</span>
+          <svg class="ec-i" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </button>
+      </form>
+
+      <div class="modal-foot" id="modalSwitch">
+        Don't have an account? <button type="button" id="switchToSignUp">Sign up</button>
+      </div>
+      <div class="modal-fineprint">By continuing, you agree to elorahub's <a data-nav="terms" data-close-modal="1">Terms of Service</a> and <a data-nav="privacy" data-close-modal="1">Privacy Policy</a>.</div>
     </div>
-    <div class="modal-fineprint">By continuing, you agree to elorahub's <a data-nav="terms" data-close-modal="1">Terms of Service</a> and <a data-nav="privacy" data-close-modal="1">Privacy Policy</a>.</div>
   </div>
 </div>
 
@@ -7406,21 +7574,41 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
 
   function setMode(newMode){
     mode = newMode;
+    var label = authSubmit.querySelector(".auth-submit-label") || authSubmit;
     if(mode === "signin"){
       modalTitle.textContent = "Welcome back";
       modalSubtitle.textContent = "Sign in to keep chatting with elora";
       nameField.style.display = "none";
-      authSubmit.textContent = "Sign in";
-      modalSwitch.innerHTML = 'Don\'t have an account? <button id="switchToSignUp">Sign up</button>';
+      label.textContent = "Sign in";
+      modalSwitch.innerHTML = 'Don\'t have an account? <button type="button" id="switchToSignUp">Sign up</button>';
     } else {
       modalTitle.textContent = "Create your account";
       modalSubtitle.textContent = "Start free — upgrade any time";
       nameField.style.display = "block";
-      authSubmit.textContent = "Create account";
-      modalSwitch.innerHTML = 'Already have an account? <button id="switchToSignIn">Sign in</button>';
+      label.textContent = "Create account";
+      modalSwitch.innerHTML = 'Already have an account? <button type="button" id="switchToSignIn">Sign in</button>';
     }
     bindSwitchLink();
   }
+
+  // Show/hide the password while typing.
+  var pwReveal = document.getElementById("authPasswordReveal");
+  if(pwReveal){
+    pwReveal.addEventListener("click", function(){
+      var input = document.getElementById("authPassword");
+      var showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      pwReveal.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      pwReveal.setAttribute("aria-pressed", String(!showing));
+      var on = pwReveal.querySelector("[data-eye-on]");
+      var off = pwReveal.querySelector("[data-eye-off]");
+      if(on && off){ on.hidden = !showing; off.hidden = showing; }
+      input.focus();
+    });
+  }
+  // Keep the error-text helpers in sync with the new hidden-attribute markup.
+  var authErrorEl2 = document.getElementById("authError");
+  if(authErrorEl2){ authErrorEl2.removeAttribute("style"); }
 
   function bindSwitchLink(){
     var s1 = document.getElementById("switchToSignUp");
@@ -7535,10 +7723,12 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
   var authErrorEl = document.getElementById("authError");
   function showAuthError(msg){
     authErrorEl.textContent = msg;
-    authErrorEl.style.display = "block";
+    authErrorEl.hidden = false;
+    authErrorEl.style.display = "";
   }
   function clearAuthError(){
-    authErrorEl.style.display = "none";
+    authErrorEl.hidden = true;
+    authErrorEl.style.display = "";
   }
 
   document.querySelectorAll(".social-btn").forEach(function(btn){
