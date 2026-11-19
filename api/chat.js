@@ -13,7 +13,7 @@ import { safeFetch, readablePage, frameable, searchWeb } from "./_lib/browse.js"
 import { handleImage, rewriteImageLinks } from "./_lib/images.js";
 import { CAPABILITIES, pickSkills, skillGuide, isHeavy, prefersGemini } from "./_lib/skills.js";
 import { research, readLinks, sourcesContext, appendSources, wantsResearch, hostOf, searchDiag } from "./_lib/research.js";
-import { normalizeMode, codeModeGuide, CODE_REVIEW_SYSTEM, studioModeGuide, AGENT_PLAN_GUIDE, AGENT_STEP_GUIDE } from "./_lib/modes.js";
+import { normalizeMode, codeModeGuide, CODE_REVIEW_SYSTEM, studioModeGuide, AGENT_PLAN_GUIDE, AGENT_STEP_GUIDE, ARCHITECT_SYSTEM, wantsCodeSubagents, buildPlanContext, builderSystem, reviewerSystem } from "./_lib/modes.js";
 import { signReply } from "./_lib/training.js";
 
 // Live progress: when the browser asks for it (body.stream), the reply is
@@ -95,7 +95,7 @@ About elorahub (use this when people ask how the app works; don't recite it unpr
 
 ${CAPABILITIES}
 
-Hard problems: slow down. Restate what's really being asked, work through it step by step, check edge cases and your own arithmetic or logic before answering, and if something is ambiguous pick the most sensible reading and say which one you chose.`;
+Hard problems: slow down. Restate what's really being asked, work through it step by step, consider more than one angle or interpretation and explicitly weigh the trade-offs, check edge cases and your own arithmetic or logic before answering, and if something is ambiguous pick the most sensible reading and say which one you chose. Don't stop at the first answer that seems to fit — ask yourself what a smart skeptic would push back on, and address it. For analysis and comparisons, give the real reasoning, name the factors that matter most, and give a clear bottom line rather than a bland "it depends". For writing, writing for a real audience: specific, textured, not generic; cut hedging and corporate filler.`;
 
 
 
@@ -1113,18 +1113,45 @@ async function chatHandler(req, res) {
     finalMessages.push({ role: "user", content: lastText });
   }
 
-  progress(buildGuide ? (mode === "studio" ? "Designing it — this can take a minute" : "Building it — big builds take a minute or two") : sources.length ? "Writing the answer from the sources" : mode === "code" ? "Writing the code" : "Writing the answer");
+  // ---- CODE SUBAGENT PIPELINE: Architect → Builder → (Reviewer) ----
+  // For non-trivial code requests, a planning subagent thinks through the
+  // problem first — files, edge cases, approach — and the builder follows
+  // that plan. This is what "Codex-style" means in practice: stop making the
+  // model hold the whole problem in one answer.
+  let architectPlan = "";
+  const useSubagents = mode === "code" && !safeImages.length && wantsCodeSubagents(lastMessage.content, preferences);
+  if (useSubagents && Date.now() - startedAt < (buildGuide ? 160000 : 25000)) {
+    progress("Architect: planning the approach");
+    try {
+      const archMsg = `Request:\n"""${lastMessage.content.slice(0, 6000)}"""`;
+      const archPlan = attemptPlan(false, true); // Gemini first — plans want headroom
+      const { result: ar } = await runWithFallback(archPlan, () => [{ role: "user", content: archMsg }], ARCHITECT_SYSTEM, {
+        maxTokens: (cfg) => (isGroqEndpoint(cfg) ? 1800 : 2200),
+        temperature: 0.15, reasoningEffort: "high", timeoutMs: 30000, totalBudgetMs: 35000,
+      });
+      if (ar.ok && ar.reply && ar.reply.trim().length > 60) {
+        architectPlan = cleanReply(ar.reply).slice(0, 5000);
+        steps.push("Architect sketched the plan");
+        // Give the builder the plan as a user-role context block so it reads
+        // like pre-work rather than part of the user's request.
+        finalMessages.splice(finalMessages.length - 1, 0, { role: "user", content: buildPlanContext(architectPlan) });
+      }
+    } catch (_e) { /* fall through to single-pass build */ }
+  }
+
+  progress(buildGuide ? (mode === "studio" ? "Designing it — this can take a minute" : "Builder: writing the code") : sources.length ? "Writing the answer from the sources" : mode === "code" ? (architectPlan ? "Builder: writing the code" : "Writing the code") : "Writing the answer");
   // Walk the attempt plan (see attemptPlan) until a model answers. Big
   // prompts go to Gemini first; Groq attempts get a trimmed history that
   // fits its per-minute token limit.
   const hasImages = safeImages.length > 0;
   const replyTokens = preferences?.style === "concise" ? 1600 : preferences?.style === "deep" || preferences?.style === "technical" ? 4000 : 3000;
-  const promptTokens = estimateTokens(finalMessages, systemPrompt);
+  const builderPrompt = architectPlan ? builderSystem(systemPrompt) : systemPrompt;
+  const promptTokens = estimateTokens(finalMessages, builderPrompt);
   const isBuildReply = Boolean(buildGuide);
-  const preferGemini = safeProvider === "gemini" || promptTokens + replyTokens > 6500 || isBuildReply || prefersGemini(skills) || mode === "studio";
+  const preferGemini = safeProvider === "gemini" || promptTokens + replyTokens > 6500 || isBuildReply || prefersGemini(skills) || mode === "studio" || architectPlan.length > 1200;
   const plan = attemptPlan(hasImages, preferGemini);
-  const messagesFor = (cfg) => (isGroqEndpoint(cfg) ? fitToBudget(finalMessages, systemPrompt, Math.max(1200, 6800 - replyTokens)) : finalMessages);
-  const { result, failures } = await runWithFallback(plan, messagesFor, systemPrompt, {
+  const messagesFor = (cfg) => (isGroqEndpoint(cfg) ? fitToBudget(finalMessages, builderPrompt, Math.max(1200, 6800 - replyTokens)) : finalMessages);
+  const { result, failures } = await runWithFallback(plan, messagesFor, builderPrompt, {
     // Groq counts prompt + reply against 8k tokens/minute, so its cap
     // depends on the prompt; Gemini gets more room for long answers.
     maxTokens: (cfg, msgs, sys) => (isGroqEndpoint(cfg) ? Math.max(1200, Math.min(replyTokens + 1200, 7600 - estimateTokens(msgs, sys))) : isBuildReply ? 12000 : Math.round(replyTokens * 2)),
@@ -1132,7 +1159,10 @@ async function chatHandler(req, res) {
     timeoutMs: isBuildReply ? 150000 : undefined,
     // Deep dive and Code get the most careful reasoning.
     // (A build needs its tokens for the page itself, not for thinking.)
-    reasoningEffort: isBuildReply || preferences?.style === "concise" ? "low" : preferences?.style === "deep" || preferences?.style === "technical" ? "high" : "medium",
+    // Tilt reasoning higher by default — the models we use won't match top
+    // closed models, so give them more thinking room on anything non-trivial.
+    // Builds need their tokens for the page itself, not for thinking.
+    reasoningEffort: isBuildReply || preferences?.style === "concise" ? "low" : preferences?.style === "deep" || preferences?.style === "technical" || architectPlan || mode === "code" || mode === "agent" || lastText.length > 240 ? "high" : "medium",
     wantReasoning: preferences?.showThinking !== false,
     totalBudgetMs: isBuildReply ? 210000 : 40000,
     onSwitch,
@@ -1164,7 +1194,7 @@ async function chatHandler(req, res) {
   if (result.finish === "length") {
     const textOnly = [...finalMessages.slice(0, -1), { role: "user", content: lastText }];
     const elapsed = Date.now() - startedAt;
-    const more = await continueLongReply(result, textOnly, systemPrompt, isBuildReply ? { budgetMs: Math.max(30000, 255000 - elapsed), timeoutMs: 90000 } : { budgetMs: Math.max(8000, 52000 - elapsed) });
+    const more = await continueLongReply(result, textOnly, builderPrompt, isBuildReply ? { budgetMs: Math.max(30000, 255000 - elapsed), timeoutMs: 90000 } : { budgetMs: Math.max(8000, 52000 - elapsed) });
     finalReply = more.reply;
     truncated = more.truncated;
     if (more.rounds) addStep(more.rounds === 1 ? "Kept writing past the length limit" : `Kept writing past the length limit (${more.rounds} more parts)`);
@@ -1190,18 +1220,20 @@ async function chatHandler(req, res) {
     }
   }
 
-  // Code mode: a second, independent look at the code before the user sees it.
+  // Code mode: Reviewer subagent — a second, independent look at the code
+  // before the user sees it. When the Architect ran, the reviewer gets its
+  // plan so it checks the code against the real contract.
   if (mode === "code" && preferences?.code?.doubleCheck !== false && /```/.test(finalReply) && finalReply.length < 16000 && !isBuildReply && Date.now() - startedAt < 150000) {
-    progress("Double-checking the code");
+    progress(architectPlan ? "Reviewer: checking the code against the plan" : "Reviewer: checking the code");
     const reviewMsg = `The user's request:\n"""${lastMessage.content.slice(0, 6000)}"""\n\nDraft answer:\n"""${finalReply}"""`;
-    const { result: rv } = await runWithFallback(attemptPlan(false, true), () => [{ role: "user", content: reviewMsg }], CODE_REVIEW_SYSTEM, {
+    const { result: rv } = await runWithFallback(attemptPlan(false, true), () => [{ role: "user", content: reviewMsg }], reviewerSystem(architectPlan), {
       maxTokens: (cfg, msgs, sys) => (isGroqEndpoint(cfg) ? Math.max(1200, 7600 - estimateTokens(msgs, sys)) : 9000),
       temperature: 0.1, reasoningEffort: "medium", timeoutMs: 70000, totalBudgetMs: 80000,
     });
     if (rv.ok) {
       const checked = cleanReply(rv.reply);
-      if (/^ok\.?$/i.test(checked.trim())) steps.push("Double-checked the code — no problems found");
-      else if (/```/.test(checked) && checked.length > finalReply.length * 0.5 && rv.finish !== "length") { finalReply = checked; steps.push("Double-checked the code and fixed what it found"); }
+      if (/^ok\.?$/i.test(checked.trim())) steps.push(architectPlan ? "Reviewer passed the code" : "Double-checked the code — no problems found");
+      else if (/```/.test(checked) && checked.length > finalReply.length * 0.5 && rv.finish !== "length") { finalReply = checked; steps.push(architectPlan ? "Reviewer fixed issues it found" : "Double-checked the code and fixed what it found"); }
     }
   }
 

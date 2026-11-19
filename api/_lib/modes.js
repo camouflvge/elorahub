@@ -28,9 +28,66 @@ export function codeModeGuide(prefs = {}) {
 }
 
 // The second pass that checks a coding answer before the user sees it.
-export const CODE_REVIEW_SYSTEM = `You are a meticulous senior code reviewer. You get a user's request and a draft answer containing code. Check the code as if you had to run it: syntax errors, missing imports or files, wrong API usage, undefined variables, off-by-one and edge cases, broken HTML/CSS/JS links between files, security problems, and anything that doesn't do what the user asked.
+// When run after the architect pass the plan is included so the reviewer
+// checks against the real design decisions, not its own guess at them.
+export const CODE_REVIEW_SYSTEM = `You are a meticulous senior code reviewer. You get a user's request and a draft answer containing code. Check the code as if you had to run it: syntax errors, missing imports or files, wrong API usage, undefined variables, off-by-one and edge cases, broken HTML/CSS/JS links between files, security problems, race conditions and state bugs, and anything that doesn't do what the user asked.
 - If the draft is correct and complete, reply with exactly: OK
 - Otherwise reply with the complete corrected answer — the same structure and explanations as the draft, every code block whole and fixed. Don't mention that it was reviewed.`;
+
+// ---- Code subagents (the Codex-style pipeline) ---------------------------
+// elora Code runs three focused agents per non-trivial request:
+//   1. ARCHITECT  — think first: restate the goal, choose the approach,
+//                   map out files/functions/edge cases, name assumptions
+//   2. BUILDER    — follow the plan and write the real code
+//   3. REVIEWER   — read request + plan + code, either "OK" or a full fix
+//
+// Each stage is a separate model call so one specialised prompt doesn't
+// have to carry every responsibility. The plan step is cheap (text only,
+// Groq-friendly) and makes the code step much stronger.
+
+export const ARCHITECT_SYSTEM = `You are the planning subagent inside elora Code — a staff engineer thinking BEFORE any code is written.
+Your output is a tight implementation plan the builder subagent will follow. Never write the code itself; the next agent does that.
+Produce exactly these sections, in order, in Markdown:
+- **Goal**: one sentence restating what the user really wants (and the single most important assumption if the request is ambiguous — pick a sensible reading and name it).
+- **Approach**: 2-4 sentences explaining the strategy and why it is right for this request — the key design choices (data model, architecture, stack choice, algorithm, UX) and trade-offs.
+- **Files**: a numbered list; for each file give its name, one line on its purpose, and its key functions or sections. For a single-file answer, give just that one file.
+- **Edge cases**: 4-8 concrete things that would break a naive first attempt (invalid input, race conditions, empty state, offline, long text, duplicates, auth, large N, mobile, keyboard, accessibility, security). Each one in a bullet with "what" and "how we'll handle it".
+- **Done when**: 3-5 observable criteria for "this works" (not vague).
+Keep the whole plan under ~350 words. Be concrete about names, types and behaviour — the builder will copy them verbatim.`;
+
+export const BUILDER_SYSTEM_SUFFIX = `A planning subagent has already thought through this request. Follow its plan exactly: use the file names, functions, data shapes and names it chose, cover every edge case it listed, and meet its "done when" criteria. The user has NOT seen the plan — do not reference it. Write complete, production-quality code the way the plan says, then a short explanation and the commands to run it.`;
+
+// Quick triage: is this request worth the full pipeline?
+// Trivial questions (syntax lookup, short tweak, one-line explain) stay
+// single-pass so they stay fast.
+export function wantsCodeSubagents(text, prefs = {}) {
+  const t = String(text || "").trim();
+  if (prefs && prefs.code && prefs.code.subagents === false) return false;
+  if (t.length < 50) return false;
+  if (/^\s*(what|why|how do i|how does|is|does|can i|whats?)\b/i.test(t) && t.length < 180 && !/```/.test(t)) return false;
+  const codey = /```|<\?php|<!doctype|<html|^\s*(import|from |const |let |var |function |class |def |interface |type |enum |export |public |private |static |async )/mi.test(t);
+  const buildy = /\b(build|make|create|write|implement|design|develop|generate|refactor|rewrite|port|convert|turn into|add|hook up|wire up|set up|script|app|game|website|dashboard|api|endpoint|component|feature|page|form|parser|crawler|bot|engine|module|library|cli|tool|solver|algorithm)\b/i.test(t);
+  const debuggy = /\b(bug|error|crash|broken|not working|doesn'?t work|fails?|exception|traceback|undefined|null|segfault|leak|regression|race|flaky|intermittent|debug|troubleshoot|trace|diagnose)\b/i.test(t);
+  const askTest = /\b(test|tests|unit test|integration|e2e|coverage)\b/i.test(t);
+  return codey || buildy || debuggy || askTest;
+}
+
+// Shape the plan into a block the builder sees as pre-work it must obey.
+export function buildPlanContext(planText) {
+  const clean = String(planText || "").trim();
+  if (!clean) return "";
+  return `[Implementation plan from the Architect subagent — follow it exactly, including file names, function names and edge cases. The user hasn't seen this plan, so don't quote it back verbatim.]\n\n${clean}`;
+}
+// Build the system prompt for the builder stage from the normal code mode
+// guide plus the subagent suffix.
+export function builderSystem(codeGuide) {
+  return `${codeGuide}\n\n${BUILDER_SYSTEM_SUFFIX}`;
+}
+// Build the system prompt for the reviewer stage, giving it the plan too.
+export function reviewerSystem(planText) {
+  const planBlock = planText ? `\n\nThe implementation plan the Architect subagent produced (use this to judge correctness — anything in the plan that isn't honoured in the code is a defect):\n"""${String(planText).slice(0, 4000)}"""` : "";
+  return `${CODE_REVIEW_SYSTEM}${planBlock}`;
+}
 
 // ---- Studio ---------------------------------------------------------------
 const STUDIO_SIZES = {

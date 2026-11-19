@@ -7976,8 +7976,8 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     saveChatPreferences();
     renderCtxBar();
   }
-  var CTX_BY_MODE = { chat:["webMode"], code:["codeLang","codeFramework","codeOutput","toggle:codeDoubleCheck","toggle:codeTests"], studio:["studioType","studioAspect","studioStyle","studioCount"], agent:["agentSteps","webMode"] };
-  var CTX_TOGGLES = { codeDoubleCheck:{ label:"Double-check", icon:"check", def:true, tip:"elora reviews its code for bugs before you see it" }, codeTests:{ label:"Tests", icon:"flask", def:false, tip:"Add tests to non-trivial logic" } };
+  var CTX_BY_MODE = { chat:["webMode"], code:["codeLang","codeFramework","codeOutput","toggle:codeSubagents","toggle:codeDoubleCheck","toggle:codeTests"], studio:["studioType","studioAspect","studioStyle","studioCount"], agent:["agentSteps","webMode"] };
+  var CTX_TOGGLES = { codeSubagents:{ label:"Subagents", icon:"brain", def:true, tip:"A planner subagent sketches the approach before the builder writes code — slower but deeper (Codex-style)" }, codeDoubleCheck:{ label:"Double-check", icon:"check", def:true, tip:"elora reviews its code for bugs before you see it" }, codeTests:{ label:"Tests", icon:"flask", def:false, tip:"Add tests to non-trivial logic" } };
   function renderCtxBar(){
     var bar = document.getElementById("modeCtxBar");
     if(!bar) return;
@@ -9506,6 +9506,10 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       if(/^Recalled/i.test(text)) out.push("Recalled memory");
       else if(/^Searched the web/i.test(text)) out.push("Searched the web");
       else if(/^Read the linked page/i.test(text)) out.push("Read a linked page");
+      else if(/^Architect sketched/i.test(text)) out.push("Planned with architect");
+      else if(/^Reviewer passed/i.test(text)) out.push("Reviewer passed");
+      else if(/^Reviewer fixed/i.test(text)) out.push("Reviewer fixed issues");
+      else if(/^Double-checked/i.test(text)) out.push("Double-checked code");
       else if(/^Thought it through/i.test(text)) return;
       else out.push(text.length > 40 ? text.slice(0, 38) + "…" : text);
     });
@@ -10905,7 +10909,7 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       webMode: chatPreferences.webMode || "auto",
       studio: currentMode() === "studio" && chatPreferences.studio ? { type: chatPreferences.studio.type || "auto", aspect: chatPreferences.studio.aspect || "auto", style: chatPreferences.studio.style || "auto", count: chatPreferences.studio.count || 1 } : undefined,
       timeZone: chatPreferences.shareZone ? (function(){ try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e){ return ""; } })() : "",
-      code: { indent: chatPreferences.codeIndent || "auto", comments: chatPreferences.codeComments || "normal", explain: chatPreferences.codeExplain || "normal", language: chatPreferences.codeLanguage || "auto", types: chatPreferences.codeTypes === true, framework: chatPreferences.codeFramework || "auto", output: chatPreferences.codeOutput || "full", tests: chatPreferences.codeTests === true, doubleCheck: chatPreferences.codeDoubleCheck !== false } };
+      code: { indent: chatPreferences.codeIndent || "auto", comments: chatPreferences.codeComments || "normal", explain: chatPreferences.codeExplain || "normal", language: chatPreferences.codeLanguage || "auto", types: chatPreferences.codeTypes === true, framework: chatPreferences.codeFramework || "auto", output: chatPreferences.codeOutput || "full", tests: chatPreferences.codeTests === true, doubleCheck: chatPreferences.codeDoubleCheck !== false, subagents: chatPreferences.codeSubagents !== false } };
   }
   // Reads a reply that may arrive as a live stream of steps (NDJSON) or as
   // plain JSON. Calls onStep for each step; resolves to { status, data }.
