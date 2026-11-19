@@ -1290,8 +1290,41 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 /* ============================================================
    Utility reveal-on-scroll (single orchestrated pass)
    ============================================================ */
-.reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal{ opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.in-view{ opacity:1; transform:translateY(0); }
+/* Staggered child reveals for feature grids */
+.hx-uses .hx-use.reveal:nth-child(1){ transition-delay:.05s; }
+.hx-uses .hx-use.reveal:nth-child(2){ transition-delay:.12s; }
+.hx-uses .hx-use.reveal:nth-child(3){ transition-delay:.19s; }
+.hx-uses .hx-use.reveal:nth-child(4){ transition-delay:.26s; }
+.hx-tools .hx-tool.reveal:nth-child(1){ transition-delay:.03s; }
+.hx-tools .hx-tool.reveal:nth-child(2){ transition-delay:.08s; }
+.hx-tools .hx-tool.reveal:nth-child(3){ transition-delay:.13s; }
+.hx-tools .hx-tool.reveal:nth-child(4){ transition-delay:.18s; }
+.hx-tools .hx-tool.reveal:nth-child(5){ transition-delay:.23s; }
+.hx-tools .hx-tool.reveal:nth-child(6){ transition-delay:.28s; }
+.hx-tools .hx-tool.reveal:nth-child(7){ transition-delay:.33s; }
+.hx-tools .hx-tool.reveal:nth-child(8){ transition-delay:.38s; }
+.ab-flow li.reveal:nth-child(1){ transition-delay:.05s; }
+.ab-flow li.reveal:nth-child(2){ transition-delay:.15s; }
+.ab-flow li.reveal:nth-child(3){ transition-delay:.25s; }
+.ab-flow li.reveal:nth-child(4){ transition-delay:.35s; }
+.ab-values .dx-card.reveal:nth-child(1){ transition-delay:.05s; }
+.ab-values .dx-card.reveal:nth-child(2){ transition-delay:.12s; }
+.ab-values .dx-card.reveal:nth-child(3){ transition-delay:.19s; }
+.ab-values .dx-card.reveal:nth-child(4){ transition-delay:.26s; }
+.hx-steps li.reveal:nth-child(1){ transition-delay:.05s; }
+.hx-steps li.reveal:nth-child(2){ transition-delay:.15s; }
+.hx-steps li.reveal:nth-child(3){ transition-delay:.25s; }
+.hx-steps li.reveal:nth-child(4){ transition-delay:.35s; }
+/* Smooth entrance for hero console tabs */
+.hx2-scene.is-on{ animation:scene-enter .5s var(--ease) both; }
+@keyframes scene-enter{ from{ opacity:0; transform:translateY(10px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
+/* Feature card subtle float on hover */
+.hx-use{ transition:transform .35s var(--ease),border-color .35s ease,background .35s ease,box-shadow .35s ease; }
+.hx-use:hover{ transform:translateY(-6px); border-color:rgba(255,255,255,.18); box-shadow:0 20px 40px -16px rgba(0,0,0,.5); }
+.dx-card{ transition:transform .3s var(--ease),border-color .3s ease,box-shadow .3s ease; }
+.dx-card:hover{ transform:translateY(-4px); box-shadow:0 16px 32px -12px rgba(0,0,0,.45); }
 
 /* ============================================================
    RESPONSIVE
@@ -3873,18 +3906,9 @@ html.reduce-motion .plan.premium::before,html.reduce-motion .plan.premium::after
 .ec-pay-banner.is-bad{ border-color:rgba(239,90,95,.45)!important; }
 .ec-task.is-done .ec-task-spin{ background:linear-gradient(135deg,#4ade80,#16a34a)!important; }
 /* Colourful custom icon tiles instead of grey ones */
-[data-tile]{ color:#fff!important; border:0!important; box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px rgba(0,0,0,.28)!important; }
-[data-tile] svg{ color:#fff; stroke:#fff; }
-[data-tile="blue"]{ background:linear-gradient(150deg,#5aa9ff,#0a63f0)!important; }
-[data-tile="green"]{ background:linear-gradient(150deg,#5bdc8f,#16a34a)!important; }
-[data-tile="orange"]{ background:linear-gradient(150deg,#ffb547,#f97316)!important; }
-[data-tile="teal"]{ background:linear-gradient(150deg,#5fd4f5,#0891b2)!important; }
-[data-tile="indigo"]{ background:linear-gradient(150deg,#7f93ff,#3f56e6)!important; }
-[data-tile="pink"]{ background:linear-gradient(150deg,#ff92c9,#ec4899)!important; }
-[data-tile="yellow"]{ background:linear-gradient(150deg,#ffd966,#eaa500)!important; }
-[data-tile="mint"]{ background:linear-gradient(150deg,#6ff2c8,#10b386)!important; }
-[data-tile="graphite"]{ background:linear-gradient(150deg,#a1a1aa,#52525b)!important; }
-[data-tile="rainbow"]{ background:conic-gradient(from 210deg,#0894ff,#c959dd,#ff2e54,#ff9004,#0894ff)!important; }
+/* Monochrome icon tiles — sleek and consistent */
+[data-tile]{ color:var(--text-2)!important; border:1px solid var(--line)!important; box-shadow:0 2px 8px rgba(0,0,0,.2)!important; background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.02))!important; }
+[data-tile] svg{ color:var(--text-2); stroke:var(--text-2); }
 .ew-card-ico[data-tile]{ border-radius:10px; }
 /* Back / forward in the chat sidebar */
 .ec-histnav{ display:flex; align-items:center; gap:2px; margin-right:auto; padding-left:4px; }
@@ -4013,9 +4037,8 @@ html.reduce-motion .ec-think-list li.is-now i{ animation:none; }
 /* Prices in chat use the same bold sans as the main page */
 .ecp-price strong,.ecp-order-price strong,.es-bill-plan strong{ font-family:var(--font-body)!important; font-weight:800!important; letter-spacing:-.03em!important; }
 /* No rainbow-coloured icons: solid colour tiles instead (glows stay) */
-[data-tile="rainbow"]{ background:linear-gradient(150deg,#5aa9ff,#0a63f0)!important; }
-.ec-upgrade-ico{ background:linear-gradient(150deg,#ffd166,#f59e0b)!important; animation:none!important; box-shadow:0 4px 14px rgba(245,158,11,.35)!important; color:#3a2300!important; }
-.ec-upgrade-ico svg{ stroke:#3a2300!important; }
+/* rainbow tile override removed */
+/* gold upgrade icon removed */
 .ew-feature-art-ai{ background:linear-gradient(150deg,#4f8dff,#1d4ed8)!important; animation:none!important; box-shadow:0 12px 30px rgba(29,78,216,.35)!important; }
 .ew-chip-ai{ background:rgba(10,132,255,.16)!important; color:#7cb8ff!important; border:1px solid rgba(10,132,255,.35)!important; }
 html[data-ec-theme="light"] .ew-chip-ai{ color:#0a5fd6!important; }
@@ -5270,7 +5293,7 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
           </div>
         </div>
 
-        <button type="button" class="ec-upgrade-pill" id="sidebarUpgrade" hidden><span class="ec-upgrade-ico"><svg class="ec-i"><use href="#i-crown"/></svg></span><span><strong id="sidebarUpgradeTitle">Upgrade to Premium</strong><small id="sidebarUpgradeSub">Unlimited messages and uploads</small></span><svg class="ec-i ec-upgrade-go"><use href="#i-forward"/></svg></button>
+        <!-- upgrade pill removed -->
         <div class="ec-side-foot ec-account-wrap">
           <div class="ec-pop ec-pop-account" id="accountMenu" role="menu" hidden>
             <div class="ec-pop-identity"><span id="accountMenuEmail">Not signed in</span><strong id="accountMenuName" hidden>Guest</strong><small id="accountSyncState"></small></div>
@@ -5724,12 +5747,12 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
         <div class="dx-icon"><svg class="dx-ico"><use href="#i-book"/></svg></div>
         <span class="dx-kicker">Guidelines</span>
         <h1>Getting the most out of <em>elora</em></h1>
-        <p class="dx-sub">How to get sharp answers, what elora can read, and the few things it won't help with.</p>
+        <p class="dx-sub">A short guide to sharper conversations, smarter uploads, and the principles that keep the platform fair.</p>
         <div class="dx-meta"><span><svg class="dx-ico"><use href="#i-clock"/></svg>Updated October 2026</span><span><svg class="dx-ico"><use href="#i-book"/></svg><i data-dx-read>3 min read</i></span><span><svg class="dx-ico"><use href="#i-check-list"/></svg><i data-dx-count>sections</i></span></div>
       </div>
       <div class="dx-short">
         <div class="dx-short-head">The short version</div>
-        <div class="dx-cards"><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-spark"/></svg></span><h3>Be specific</h3><p>Say what the answer is for and give real constraints — elora weighs trade-offs better with something concrete.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-paperclip"/></svg></span><h3>Know what it reads</h3><p>Images up to 3 MB and text or code files up to 200 KB. PDFs and Word files are attached by name only for now.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-shield"/></svg></span><h3>Use it fairly</h3><p>No harassment, no malicious code, no getting around limits or at other people's data.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-scale"/></svg></span><h3>Double-check what matters</h3><p>elora can be wrong. Confirm medical, legal and financial decisions with a professional.</p></div></div>
+        <div class="dx-cards"><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-spark"/></svg></span><h3>Be specific</h3><p>Tell elora the purpose, the audience, and the constraints. Concrete context produces reasoning — vague prompts produce guesses.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-paperclip"/></svg></span><h3>Attach what matters</h3><p>Images, text files, and code up to sensible limits. The more relevant context elora sees, the less it has to assume.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-shield"/></svg></span><h3>Use it responsibly</h3><p>Build, learn, and create — but never to harass, deceive, or compromise another person's safety or data.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-scale"/></svg></span><h3>Verify what counts</h3><p>elora reasons carefully but isn't infallible. Treat high-stakes answers as a strong second opinion, not a final verdict.</p></div></div>
       </div>
       <div class="doc-layout">
         <nav class="doc-toc" id="guidelinesToc">
@@ -5741,37 +5764,37 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
         </nav>
         <div class="doc-body">
           <h2 id="g-using-well">Using elora well</h2>
-          <p>elora is built to reason, not just autocomplete. You'll get sharper answers if you treat it like a capable colleague rather than a search box.</p>
+          <p>elora is built to reason through problems, not autocomplete sentences. The difference between a mediocre answer and a genuinely useful one almost always comes down to what you give it to work with.</p>
           <ul>
-            <li>Say what you actually want the answer to do — inform a decision, draft something final, or just help you think.</li>
-            <li>Give real constraints (budget, audience, deadline). elora weighs trade-offs better with something concrete to weigh.</li>
-            <li>Push back on an answer if it's off. elora will re-reason from your correction rather than just repeating itself.</li>
-            <li>For bigger jobs, switch on Task. elora plans the steps, works through them one by one, and hands you the files.</li>
+            <li><strong>State the purpose, not just the question.</strong> "Explain closures" and "Explain closures so I can teach a junior developer" produce very different answers — both on purpose.</li>
+            <li><strong>Give real constraints.</strong> Budget, audience, deadline, stack, style guide. elora weighs trade-offs better when it has something concrete to weigh against.</li>
+            <li><strong>Push back.</strong> If an answer is off, say why. elora will re-reason from your correction rather than defensively repeating itself.</li>
+            <li><strong>Use Task mode for bigger jobs.</strong> elora plans the steps, works through them one by one, generates the files, and hands you the result — no babysitting required.</li>
           </ul>
 
           <h2 id="g-uploads">Uploading files &amp; images</h2>
-          <p>You can attach files and images to any conversation — drag them in, or press Ctrl+U. How many uploads each plan includes is listed on the Pricing page.</p>
+          <p>Attach files and images to any conversation by dragging them in or pressing <kbd>Ctrl + U</kbd>. The more relevant context elora can see, the less it has to infer.</p>
           <ul>
-            <li>Images up to 3 MB, and text or source-code files up to 200 KB — elora reads the first ~30,000 characters of each.</li>
-            <li>PDFs, Word documents and other formats are attached by name only for now. Paste the text if you need elora to read it.</li>
-            <li>Only upload files you have the right to share — don't include others' private or confidential data without permission.</li>
-            <li>Larger files may take longer for elora to fully read before it starts reasoning about them.</li>
+            <li><strong>Images</strong> up to 3 MB — screenshots, diagrams, photos of whiteboards, error screens.</li>
+            <li><strong>Text and code files</strong> up to 200 KB — elora reads the first ~30,000 characters of each file.</li>
+            <li><strong>PDFs and Word documents</strong> are attached by name for now. For best results, paste the relevant text directly into the chat.</li>
+            <li><strong>Respect ownership.</strong> Only upload files you have the right to share. Don't include another person's private or confidential data without their permission.</li>
           </ul>
 
           <h2 id="g-acceptable-use">Acceptable use</h2>
-          <p>elorahub is for genuine work, learning, and creativity. To keep it useful and safe for everyone, don't use elora to:</p>
+          <p>elorahub exists for genuine work, learning, and creative expression. The platform stays useful only when every user respects the same boundaries:</p>
           <ul>
-            <li>Generate content intended to harass, deceive, or harm a real person or group.</li>
-            <li>Attempt to extract another user's private data or bypass account and usage limits.</li>
-            <li>Produce malicious code, or material intended to facilitate illegal activity.</li>
+            <li><strong>No harmful content.</strong> Do not use elora to generate material intended to harass, deceive, impersonate, or endanger any person or group.</li>
+            <li><strong>No data exploitation.</strong> Do not attempt to extract another user's private data, reverse-engineer model internals, or circumvent account or usage limits.</li>
+            <li><strong>No malicious output.</strong> Do not produce exploit code, phishing material, or any content designed to facilitate illegal activity.</li>
           </ul>
-          <div class="callout">Accounts that repeatedly violate these guidelines may be limited or suspended. See the full <button type="button" class="hc-link" data-nav="terms">Terms of Service</button> for details.</div>
+          <div class="callout">Accounts that repeatedly violate these guidelines may be rate-limited, suspended, or permanently removed. Full details are in the <button type="button" class="hc-link" data-nav="terms">Terms of Service</button>.</div>
 
           <h2 id="g-limitations">Where elora falls short</h2>
-          <p>elora reasons carefully, but it isn't infallible. Treat it as a very capable second opinion, not a final authority — especially for medical, legal, or financial decisions, where you should confirm anything important with a qualified professional.</p>
+          <p>elora reasons carefully, cross-checks its own logic, and grounds answers in search when it can — but it is not infallible. It can hallucinate citations, misread ambiguous data, or over-simplify nuanced topics. Treat it as a strong second opinion, not a final authority. For medical, legal, and financial decisions, always confirm with a qualified professional.</p>
 
           <h2 id="g-feedback">Reporting an issue</h2>
-          <p>If elora gives you a response that seems wrong, unsafe, or off-brand for what we're building, press the thumbs-down under that reply, or email <a class="hc-link" href="mailto:elorahubonline@gmail.com">elorahubonline@gmail.com</a>. Real examples help us improve answer quality fastest.</p>
+          <p>If elora produces a response that seems wrong, unsafe, or inconsistent with what this platform should stand for, press the thumbs-down icon under the reply — or email <a class="hc-link" href="mailto:elorahubonline@gmail.com">elorahubonline@gmail.com</a> with as much context as you can share. Concrete examples are the fastest path to better answers for everyone.</p>
           <div class="dx-next"><button type="button" data-nav="privacy"><span class="dx-ci"><svg class="dx-ico"><use href="#i-lock"/></svg></span><span><small>Keep reading</small><strong>Privacy Policy</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button><button type="button" data-nav="terms"><span class="dx-ci"><svg class="dx-ico"><use href="#i-doc"/></svg></span><span><small>Keep reading</small><strong>Terms of Service</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button><button type="button" data-nav="help"><span class="dx-ci"><svg class="dx-ico"><use href="#i-help"/></svg></span><span><small>Keep reading</small><strong>Help center</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button></div>
         </div>
       </div>
@@ -5869,12 +5892,12 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
         <div class="dx-icon"><svg class="dx-ico"><use href="#i-doc"/></svg></div>
         <span class="dx-kicker">Terms</span>
         <h1>Terms of <em>Service</em></h1>
-        <p class="dx-sub">The agreement between you and elorahub — with the plain-language version first.</p>
+        <p class="dx-sub">The agreement that governs your use of elorahub — written in plain language, with the summary up front.</p>
         <div class="dx-meta"><span><svg class="dx-ico"><use href="#i-clock"/></svg>Updated October 2026</span><span><svg class="dx-ico"><use href="#i-book"/></svg><i data-dx-read>3 min read</i></span><span><svg class="dx-ico"><use href="#i-check-list"/></svg><i data-dx-count>sections</i></span></div>
       </div>
       <div class="dx-short">
         <div class="dx-short-head">The short version</div>
-        <div class="dx-cards"><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-card"/></svg></span><h3>Cancel any time</h3><p>Paid plans renew automatically. Cancel whenever and keep access until the period ends.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-user"/></svg></span><h3>Your content stays yours</h3><p>You own what you submit. We only process it to answer you and run the service.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-shield"/></svg></span><h3>Play fair</h3><p>Don't get around limits, reverse-engineer elora, or break the Guidelines or the law.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-scale"/></svg></span><h3>AI can be wrong</h3><p>elorahub is provided as is — not professional medical, legal or financial advice.</p></div></div>
+        <div class="dx-cards"><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-card"/></svg></span><h3>Cancel any time</h3><p>Paid plans renew automatically. Cancel whenever you want and keep full access until the billing period ends — no clawbacks.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-user"/></svg></span><h3>Your content is yours</h3><p>Everything you submit stays your intellectual property. We process it only to generate responses and operate the service.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-shield"/></svg></span><h3>Respect the platform</h3><p>Don't circumvent limits, reverse-engineer elora, or use the service in ways that violate the Guidelines or applicable law.</p></div><div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-scale"/></svg></span><h3>AI has limits</h3><p>elorahub is provided as-is. Responses are not professional medical, legal, or financial advice — always verify what matters.</p></div></div>
       </div>
       <div class="doc-layout">
         <nav class="doc-toc" id="termsToc">
@@ -5889,33 +5912,33 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
         </nav>
         <div class="doc-body">
           <h2 id="t-accounts">Accounts</h2>
-          <p>You need an account to use elorahub beyond a basic preview. You're responsible for keeping your login credentials secure and for activity that happens under your account, including if you sign in via Google, Apple, or GitHub.</p>
+          <p>An account is required to access elorahub's full capabilities — chat, code generation, and task execution. You are responsible for keeping your login credentials secure and for all activity that occurs under your account, whether you sign in with email and password or through Google, Apple, or GitHub. If you believe your account has been compromised, contact us immediately at <a class="hc-link" href="mailto:elorahubonline@gmail.com">elorahubonline@gmail.com</a>.</p>
 
           <h2 id="t-plans">Plans &amp; billing</h2>
-          <p>elorahub offers a Free plan and two paid subscriptions, Private ($15/month) and Premium ($25/month). Paid plans renew automatically each billing period until cancelled. You can cancel at any time, and your plan stays active until the end of the current billing period.</p>
+          <p>elorahub offers three tiers: Free, Private ($15/month), and Premium ($25/month). Paid plans renew automatically at the start of each billing period and can be cancelled at any time — your access continues through the end of the period you've already paid for.</p>
           <ul>
-            <li>Upload and message limits for each plan are described on the Pricing page and may be adjusted with reasonable notice.</li>
-            <li>Card payments are processed by Bank of Georgia on its secure payment page. elorahub never sees or stores your full card number; the bank keeps your card for automatic renewals until you cancel in Settings → Billing.</li>
-            <li>Refunds are considered case-by-case for billing errors; general dissatisfaction after significant usage may not qualify.</li>
+            <li><strong>Limits.</strong> Upload and message quotas for each plan are described on the Pricing page and may be adjusted with reasonable advance notice.</li>
+            <li><strong>Payments.</strong> Card payments are processed securely by Bank of Georgia on its own payment page. elorahub never sees or stores your full card number; the bank retains your card details for automatic renewals until you cancel in Settings → Billing.</li>
+            <li><strong>Refunds.</strong> Billing errors are refunded on a case-by-case basis. General dissatisfaction after significant usage of the service may not qualify for a refund.</li>
           </ul>
 
           <h2 id="t-conduct">Acceptable conduct</h2>
-          <p>By using elorahub, you agree not to misuse the service — including attempting to circumvent usage limits, reverse-engineer elora, or use the chat to generate content that violates our Guidelines or applicable law.</p>
+          <p>By using elorahub you agree to use the platform responsibly. This means you will not attempt to circumvent usage limits or authentication mechanisms, reverse-engineer elora's models or infrastructure, scrape or bulk-export content, or use the service to generate material that violates our <button type="button" class="hc-link" data-nav="guidelines">Guidelines</button> or any applicable law. We reserve the right to enforce these standards at our discretion.</p>
 
           <h2 id="t-content">Content &amp; ownership</h2>
-          <p>You retain ownership of the messages, files, and images you submit. You grant elorahub a limited license to process that content in order to generate responses and operate the service. You're responsible for having the rights to anything you upload.</p>
+          <p>You retain full ownership of the messages, files, and images you submit to elorahub. By submitting content, you grant elorahub a limited, non-exclusive license to process that content solely for the purpose of generating responses and operating the service. You are responsible for ensuring you have the rights to any material you upload.</p>
 
           <h2 id="t-disclaimer">Disclaimer</h2>
-          <p>elora's responses are generated by an AI system and may occasionally be incomplete or incorrect. elorahub is provided "as is," and responses shouldn't be treated as professional medical, legal, or financial advice.</p>
+          <p>elora's responses are generated by AI systems and may occasionally be incomplete, inaccurate, or outdated. elorahub is provided "as is" without warranties of any kind. Responses should not be treated as professional medical, legal, financial, or safety advice. For decisions that carry real-world consequences, always consult a qualified professional.</p>
 
           <h2 id="t-termination">Termination</h2>
-          <p>We may suspend or terminate accounts that violate these Terms or our Guidelines. You may stop using elorahub and delete your account at any time from account settings.</p>
+          <p>We may suspend or terminate accounts that violate these Terms or our Guidelines, with or without prior notice depending on severity. You may stop using elorahub and delete your account at any time from Settings → Account. Upon deletion, your data is removed from active systems within a reasonable period as described in the <button type="button" class="hc-link" data-nav="privacy">Privacy Policy</button>.</p>
 
           <h2 id="t-changes">Changes to these terms</h2>
-          <p>We may update these Terms as elorahub evolves. Meaningful changes will be reflected by an updated "last updated" date above, and continued use of the service after changes means you accept the revised Terms.</p>
+          <p>We may update these Terms as elorahub evolves. Material changes will be reflected by an updated date at the top of this page, and where practicable we will notify you in-app. Continued use of elorahub after changes take effect constitutes acceptance of the revised Terms.</p>
 
           <h2 id="t-contact">Contact</h2>
-          <p>Questions about these Terms, your plan or a payment can be sent to <a class="hc-link" href="mailto:elorahubonline@gmail.com">elorahubonline@gmail.com</a>.</p>
+          <p>Questions about these Terms, your subscription, billing, or a refund request can be directed to <a class="hc-link" href="mailto:elorahubonline@gmail.com">elorahubonline@gmail.com</a>. We aim to respond within a few working days.</p>
           <div class="dx-next"><button type="button" data-nav="privacy"><span class="dx-ci"><svg class="dx-ico"><use href="#i-lock"/></svg></span><span><small>Keep reading</small><strong>Privacy Policy</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button><button type="button" data-nav="guidelines"><span class="dx-ci"><svg class="dx-ico"><use href="#i-book"/></svg></span><span><small>Keep reading</small><strong>Guidelines</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button><button type="button" data-nav="help"><span class="dx-ci"><svg class="dx-ico"><use href="#i-help"/></svg></span><span><small>Keep reading</small><strong>Help center</strong></span><svg class="dx-ico dx-go"><use href="#i-arrow-right"/></svg></button></div>
         </div>
       </div>
@@ -5933,8 +5956,8 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
             <button class="dp-tab" data-nav="help"><svg class="dx-ico"><use href="#i-help"/></svg>Help center</button>
           </div>
           <span class="dx-kicker">About elorahub</span>
-          <h1>A fast reply isn't worth much if it isn't a <em>good</em> one.</h1>
-          <p>elorahub exists because most chat tools make you choose between speed and depth. elora is our answer: an assistant that thinks a problem through, looks things up when it needs to, and still gets back to you quickly — whether you're writing, deciding, learning, or shipping code.</p>
+          <h1>Intelligence that earns the conversation, not just fills it.</h1>
+          <p>Most AI assistants race to reply. elora was designed from the ground up to reason first — to weigh evidence, cross-check its own logic, search the open web when today's facts matter, and deliver answers you can actually build on. Whether you're debugging at 2 a.m., mapping a career move, drafting a pitch that has to land, or learning a subject from scratch, elora meets you where you are and treats the problem like it matters, because to you it does.</p>
           <div class="ab-actions">
             <button class="btn btn-primary" data-nav="chat">Try elora now</button>
             <button class="btn btn-ghost" data-nav="pricing">See plans</button>
@@ -5950,33 +5973,33 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       </div>
 
       <div class="ab-stats">
-        <div class="ab-stat reveal"><strong>Chat · Code · Task</strong><span>Three ways to work with elora</span></div>
-        <div class="ab-stat reveal"><strong>Text · Code · Images</strong><span>What elora can read from your uploads</span></div>
-        <div class="ab-stat reveal"><strong>Free · Private · Premium</strong><span>Plans with clearly described limits</span></div>
+        <div class="ab-stat reveal"><strong>Chat · Code · Studio · Agent</strong><span>Four distinct workspaces, one assistant</span></div>
+        <div class="ab-stat reveal"><strong>Groq + Gemini + fallback</strong><span>Multi-model pipeline — always a brain available</span></div>
+        <div class="ab-stat reveal"><strong>Free · Private · Premium</strong><span>Transparent pricing, no hidden limits</span></div>
       </div>
 
       <div class="hc-block hc-wrap">
-        <div class="hc-title reveal"><h2>How elora works</h2><p>What happens after you press send</p></div>
+        <div class="hc-title reveal"><h2>How elora works</h2><p>What happens between your question and the answer</p></div>
         <ol class="ab-flow">
-          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-chat"/></svg></span><h3>Reads everything</h3><p>Your message, the earlier conversation, files you attach, and the links you paste.</p></li>
-          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-bulb"/></svg></span><h3>Thinks it through</h3><p>It works out what you actually need. If one AI model is busy, elora switches to another on its own.</p></li>
-          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-globe"/></svg></span><h3>Looks things up</h3><p>When an answer depends on current facts, elora searches the web and tells you it did.</p></li>
-          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-check-list"/></svg></span><h3>Answers — or does the job</h3><p>A clear reply, or in Task mode a plan it works through step by step, with files you can download.</p></li>
+          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-layers"/></svg></span><h3>Ingests full context</h3><p>Your message, the entire conversation history, every file and image you attach, links you paste, and what elora remembers about you — all of it feeds the reasoning engine before a single word is generated.</p></li>
+          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-sparkles"/></svg></span><h3>Reasons deeply</h3><p>elora doesn't pattern-match — it decomposes your question, considers trade-offs, and stress-tests its own answer. If the primary model is saturated, it seamlessly fails over to the next one with zero delay.</p></li>
+          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-search"/></svg></span><h3>Grounds in reality</h3><p>When the answer depends on today — prices, events, documentation — elora searches the live web, reads the sources, and cites them so you can verify.</p></li>
+          <li class="reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-check"/></svg></span><h3>Delivers — or executes</h3><p>A concise answer with citations, or in Agent and Code mode a multi-step plan it works through autonomously, handing you the finished files.</p></li>
         </ol>
       </div>
 
       <div class="hc-block hc-wrap">
-        <div class="hc-title reveal"><h2>What we care about</h2><p>The ideas behind every decision</p></div>
+        <div class="hc-title reveal"><h2>What we care about</h2><p>The principles behind every line of code</p></div>
         <div class="ab-values">
-          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-bulb"/></svg></span><h3>Reasoning over reflex</h3><p>elora is built to check its answer before sending it, rather than shipping the first plausible thing.</p></div>
-          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-bolt"/></svg></span><h3>Speed that doesn't cut corners</h3><p>We optimise the pipeline, not the thinking — a quick reply should still feel considered.</p></div>
-          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-card"/></svg></span><h3>Straightforward plans</h3><p>Three tiers and clearly described limits. What you see on the Pricing page is what you get.</p></div>
-          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-lock"/></svg></span><h3>Privacy by default</h3><p>Private and Premium give you an unshared conversation space, and you can delete any chat or your account at any time.</p></div>
+          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-brain"/></svg></span><h3>Depth over reflex</h3><p>Every response passes through a reasoning layer that weighs alternatives and stress-tests its own logic. The first plausible answer is the starting point, not the destination.</p></div>
+          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-zap"/></svg></span><h3>Speed without shortcuts</h3><p>We obsess over the pipeline — model routing, inference batching, edge caching — so the thinking gets time without you feeling the wait. Fast and considered are not opposites.</p></div>
+          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-eye"/></svg></span><h3>Radical transparency</h3><p>Three plans, clearly described limits, no "enterprise pricing on request." When elora searches, it shows you it searched. When it's unsure, it says so.</p></div>
+          <div class="dx-card reveal"><span class="dx-ci"><svg class="dx-ico"><use href="#i-shield"/></svg></span><h3>Privacy as architecture</h3><p>Your conversations live in your browser and your account. We never sell data. Memory is opt-in and erasable. Delete a chat and it's gone — no shadow copies, no 30-day holds.</p></div>
         </div>
       </div>
 
       <div class="hc-cta hc-wrap reveal">
-        <div><h2>See it for yourself</h2><p>Ask elora anything — no card needed, and you can start without an account.</p></div>
+        <div><h2>See it for yourself</h2><p>Create a free account in seconds and ask elora anything — no credit card required.</p></div>
         <div class="hc-cta-actions"><button class="btn btn-primary" data-nav="chat">Open chat</button><button class="btn btn-ghost" data-nav="help">Read the help center</button></div>
       </div>
     </div>
@@ -7145,6 +7168,11 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
   // Page changes cross-fade with a soft blur where the browser supports
   // View Transitions; the nav highlight slides to the new tab.
   function showPage(name){
+    /* ---- Auth gate: chat and code require sign-in ---- */
+    if((name === "chat" || name === "code") && !currentUser){
+      openModal("signup");
+      return;
+    }
     var current = document.querySelector(".page.is-active");
     var reduce = document.documentElement.classList.contains("reduce-motion") || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     if(document.startViewTransition && !reduce && current && current.id !== "page-" + name){
