@@ -1,8 +1,8 @@
 import { verifyRequester, getSupabaseClient } from "./_lib/supabaseAdmin.js";
 
-const EMPTY = { schema: 1, projects: [], artifacts: [], schedules: [], skills: [] };
+const EMPTY = { schema: 1, projects: [], artifacts: [], schedules: [], skills: [], sessions: [] };
 const ID_RE = /^[a-zA-Z0-9._:-]{1,100}$/;
-const MAX_BODY_BYTES = 1_500_000;
+const MAX_BODY_BYTES = 3_000_000;
 
 function send(res, status, body) {
   res.setHeader("Cache-Control", "no-store, private");
@@ -58,7 +58,20 @@ function sanitizeWorkspace(raw) {
     if (!skillId || !title || !prompt) return null;
     return { id: skillId, title, prompt, createdAt: timestamp(s.createdAt, now), updatedAt: timestamp(s.updatedAt, now) };
   }, 100);
-  return { schema: 1, projects, artifacts, schedules, skills };
+  // Chat history — persisted so conversations survive across devices and cleared browsers.
+  const sessions = sanitizeArray(data.sessions, (s) => {
+    const sid = typeof s?.id === "number" && Number.isFinite(s.id) ? s.id : id(s?.id);
+    if (sid === null || sid === undefined) return null;
+    const history = sanitizeArray(s?.history, (m) => {
+      const role = m?.role === "assistant" ? "assistant" : m?.role === "user" ? "user" : null;
+      const content = text(m?.content, 4000);
+      if (!role || !content) return null;
+      return { role, content };
+    }, 30);
+    if (!history.length) return null;
+    return { id: sid, title: text(s?.title, 120, "Conversation"), mode: text(s?.mode, 20, "chat"), started: s?.started === true, pinned: s?.pinned === true, projectId: typeof s?.projectId === "string" ? text(s.projectId, 100) : null, updatedAt: timestamp(s?.updatedAt, now), history };
+  }, 25);
+  return { schema: 1, projects, artifacts, schedules, skills, sessions };
 }
 function isMissingSchema(error) {
   return ["42P01", "PGRST205", "PGRST204"].includes(error?.code) || /relation .* does not exist|could not find the table/i.test(error?.message || "");

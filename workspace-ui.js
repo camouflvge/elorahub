@@ -56,7 +56,19 @@
   }
   function readJson(key, fallback){ try{ var v=JSON.parse(localStorage.getItem(key)||"null"); return v==null?fallback:v; }catch(_e){ return fallback; } }
   function writeJson(key,value){ try{ localStorage.setItem(key,JSON.stringify(value)); return true; }catch(_e){ return false; } }
-  function snapshotSynced(){ return {schema:1,projects:state.projects,artifacts:state.artifacts,schedules:state.schedules,skills:state.skills}; }
+  // Chat history, trimmed so it stays small enough to sync to the account.
+  function sessionsForSync(){
+    return (Array.isArray(state.sessions)?state.sessions:[]).slice(0,20).map(function(s){
+      return {
+        id:s.id, title:String(s.title||"Conversation").slice(0,120), mode:s.mode||"chat",
+        started:s.started===true, pinned:!!s.pinned,
+        projectId:typeof s.projectId==="string"?s.projectId:null,
+        updatedAt:Number(s.updatedAt)||Date.now(),
+        history:(Array.isArray(s.history)?s.history:[]).slice(-24).map(function(m){ return {role:m.role,content:String(m.content||"").slice(0,4000)}; })
+      };
+    }).filter(function(s){ return s.started && s.history.length; });
+  }
+  function snapshotSynced(){ return {schema:1,projects:state.projects,artifacts:state.artifacts,schedules:state.schedules,skills:state.skills,sessions:sessionsForSync()}; }
   function mergeItems(localItems,remoteItems){
     var map=new Map();
     (Array.isArray(remoteItems)?remoteItems:[]).concat(Array.isArray(localItems)?localItems:[]).forEach(function(item){
@@ -70,7 +82,7 @@
     var out=emptyState();
     ["projects","artifacts","schedules","skills"].forEach(function(k){out[k]=mergeItems(local[k],remote[k]);});
     out.taskRuns=mergeItems(local.taskRuns,remote.taskRuns);
-    out.sessions=local.sessions||[];
+    out.sessions=mergeItems(local.sessions,remote.sessions).slice(0,30);
     return out;
   }
   function mergeGuestWorkspaceIntoAccount(accountIdentity){
@@ -106,8 +118,10 @@
       var data=await res.json();
       if(identity!==requestedIdentity) return false;
       var remote=normalizeState(data.workspace||data);
+      if(app&&app.getSessions) state.sessions=app.getSessions();
       state=mergeWorkspace(state,remote);
       syncAvailable=true; accountSyncReady=true; syncMessage="Synced to your account";
+      if(app&&app.restoreSessions) app.restoreSessions(state.sessions);
       localSave(); renderAll(); setSyncText();
       if(guestImportPending){guestImportPending=false;toast("Your browser-local projects, notes, reminders and prompts are now synced to this account.");}
       return true;
@@ -819,7 +833,7 @@
     }
     window.addEventListener("elorahub:auth-state",function(){onAuthChange();});
     window.addEventListener("elorahub:conversation-updated",function(){
-      if(app&&app.getSessions){state.sessions=app.getSessions();writeJson(storageKey("chats",identity),state.sessions);}
+      if(app&&app.getSessions){ state.sessions=app.getSessions(); localSave(); }
       if(activePanel==="projects"&&pageEl&&!pageEl.hidden)renderPanel();
     });
     document.querySelectorAll("[data-theme-mode]").forEach(function(btn){btn.addEventListener("click",function(){if(app&&app.setThemeMode)app.setThemeMode(btn.dataset.themeMode);document.querySelectorAll("[data-theme-mode]").forEach(function(b){b.classList.toggle("is-active",b===btn);});});});

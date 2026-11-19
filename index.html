@@ -4949,38 +4949,6 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       </div>
     </div>
 
-    <!-- EXPLORE: a short recorded tour of the real app -->
-    <div class="section xv-section" id="explore">
-      <div class="section-head reveal">
-        <span class="eyebrow-plain">Explore elora</span>
-        <h2>Take the 55-second tour</h2>
-        <p>The real app, start to finish: ask a question, watch elora think, hand it a bigger job, and make it yours.</p>
-      </div>
-      <div class="xv reveal" id="tourPlayer">
-        <div class="xv-frame">
-          <div class="xv-bar"><span class="dots-group"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span class="xv-url">elorahub.online</span><span class="xv-live"><i></i>Tour</span></div>
-          <div class="xv-screen">
-            <video id="tourVideo" muted playsinline loop preload="none" poster="assets/elora-tour-poster-v3.jpg" aria-label="A recorded tour of elora: asking a question, a task with files, and settings">
-              <source src="assets/elora-tour-v3.webm" type="video/webm">
-              <source src="assets/elora-tour-v3.mp4" type="video/mp4">
-            </video>
-            <button type="button" class="xv-big" id="tourBig" aria-label="Play the tour"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></button>
-          </div>
-          <div class="xv-controls">
-            <button type="button" class="xv-play" id="tourPlay" aria-label="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="xv-ic-play" d="M8 5.5v13l11-6.5z"/><path class="xv-ic-pause" d="M8 5v14M16 5v14"/></svg></button>
-            <div class="xv-track" id="tourTrack" role="slider" aria-label="Tour progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><i id="tourFill"></i><span class="xv-mark" style="left:5.3%"></span><span class="xv-mark" style="left:37.9%"></span><span class="xv-mark" style="left:73.4%"></span></div>
-            <span class="xv-time" id="tourTime">0:00</span>
-          </div>
-        </div>
-        <div class="xv-chapters" role="tablist" aria-label="Tour chapters">
-          <button type="button" class="xv-ch is-active" data-t="0" data-end="2.6"><span class="xv-n">01</span><strong>Meet elora</strong><small>The home page</small><i><b></b></i></button>
-          <button type="button" class="xv-ch" data-t="2.6" data-end="18.1"><span class="xv-n">02</span><strong>Ask and watch it think</strong><small>Thinking trail, tables, reasoning</small><i><b></b></i></button>
-          <button type="button" class="xv-ch" data-t="18.1" data-end="35.4"><span class="xv-n">03</span><strong>Hand over a big job</strong><small>Plan, steps, web search, files</small><i><b></b></i></button>
-          <button type="button" class="xv-ch" data-t="35.4" data-end="53.7"><span class="xv-n">04</span><strong>Make it yours</strong><small>Artifacts, skills, schedules, settings</small><i><b></b></i></button>
-        </div>
-      </div>
-    </div>
-
     <!-- DEMO: an auto-playing walkthrough of real use cases -->
     <div class="section hx-demo-section" id="demo">
       <div class="section-head reveal">
@@ -7383,47 +7351,6 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       setTimeout(function(){ b.remove(); }, 760);
       step();
     });
-  })();
-
-  /* ---------------- Explore tour video: chapters, autoplay in view ---------------- */
-  (function(){
-    var wrap = document.getElementById("tourPlayer"), video = document.getElementById("tourVideo");
-    if(!wrap || !video) return;
-    var chapters = Array.prototype.slice.call(wrap.querySelectorAll(".xv-ch"));
-    var fill = document.getElementById("tourFill"), time = document.getElementById("tourTime"), track = document.getElementById("tourTrack");
-    var userPaused = false, reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function fmt(t){ t = Math.max(0, Math.floor(t)); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
-    function play(){ if(video.preload === "none") video.preload = "auto"; var p = video.play(); if(p && p.catch) p.catch(function(){}); }
-    function sync(){
-      var d = video.duration || 49.3, t = video.currentTime || 0;
-      fill.style.transform = "scaleX(" + Math.min(1, t / d).toFixed(4) + ")";
-      time.textContent = fmt(t);
-      track.setAttribute("aria-valuenow", String(Math.round(t / d * 100)));
-      chapters.forEach(function(ch){
-        var a = +ch.getAttribute("data-t"), b = +ch.getAttribute("data-end");
-        var on = t >= a && t < b;
-        ch.classList.toggle("is-active", on);
-        ch.querySelector("b").style.transform = "scaleX(" + (t >= b ? 1 : on ? ((t - a) / (b - a)).toFixed(3) : 0) + ")";
-      });
-    }
-    video.addEventListener("timeupdate", sync);
-    video.addEventListener("play", function(){ wrap.classList.add("is-playing"); });
-    video.addEventListener("pause", function(){ wrap.classList.remove("is-playing"); });
-    document.getElementById("tourPlay").addEventListener("click", function(){ if(video.paused){ userPaused = false; play(); } else { userPaused = true; video.pause(); } });
-    document.getElementById("tourBig").addEventListener("click", function(){ userPaused = false; play(); });
-    video.addEventListener("click", function(){ if(video.paused){ userPaused = false; play(); } else { userPaused = true; video.pause(); } });
-    chapters.forEach(function(ch){ ch.addEventListener("click", function(){ video.currentTime = +ch.getAttribute("data-t"); userPaused = false; play(); sync(); }); });
-    function seekFrom(e){ var r = track.getBoundingClientRect(); var x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); video.currentTime = x * (video.duration || 49.3); sync(); }
-    track.addEventListener("click", function(e){ seekFrom(e); if(video.paused && !userPaused) play(); });
-    track.addEventListener("keydown", function(e){ if(e.key === "ArrowRight"){ video.currentTime += 5; sync(); } else if(e.key === "ArrowLeft"){ video.currentTime -= 5; sync(); } });
-    if("IntersectionObserver" in window){
-      new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-          if(en.isIntersecting && en.intersectionRatio > 0.45){ if(!userPaused && !reduce) play(); }
-          else if(!video.paused){ video.pause(); }
-        });
-      }, { threshold:[0, 0.45, 0.8] }).observe(video);
-    }
   })();
 
   /* ---------------- Pricing cycle switch ---------------- */
@@ -13777,8 +13704,18 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     assignActiveProject:function(projectId){ if(!activeConversation) return; if(projectId) activeConversation.projectId=projectId; else delete activeConversation.projectId; if(activeConversation.started) saveActiveConversation(); else window.dispatchEvent(new CustomEvent("elorahub:conversation-updated")); },
     startNewChat:function(){ resetConversation(); },
     restoreSessions:function(list){
-      if(activeConversation && activeConversation.started) saveActiveConversation();
-      chatSessions=(Array.isArray(list)?list:[]).filter(function(s){return s&&s.id!=null&&Array.isArray(s.history);}).map(function(s){return {id:Number(s.id),title:String(s.title||"Conversation").slice(0,100),started:!!s.started,history:s.history.filter(function(m){return m&&(m.role==="user"||m.role==="assistant");}).slice(0,400).map(function(m){return {role:m.role,content:String(m.content||"").slice(0,30000)};}),threadHtml:String(s.threadHtml||"").slice(0,150000),updatedAt:Number(s.updatedAt)||Date.now(),projectId:typeof s.projectId==="string"?s.projectId:null,pinned:!!s.pinned,mode:modeOf(s.mode)};}).slice(0,30);
+      // When a sync lands mid-chat, keep the conversation on screen.
+      var keepActive = activeConversation && activeConversation.started ? activeConversation : null;
+      if(keepActive) saveActiveConversation();
+      var mapped=(Array.isArray(list)?list:[]).filter(function(s){return s&&s.id!=null&&Array.isArray(s.history);}).map(function(s){return {id:Number(s.id),title:String(s.title||"Conversation").slice(0,100),started:!!s.started,history:s.history.filter(function(m){return m&&(m.role==="user"||m.role==="assistant");}).slice(0,400).map(function(m){return {role:m.role,content:String(m.content||"").slice(0,30000)};}),threadHtml:String(s.threadHtml||"").slice(0,150000),updatedAt:Number(s.updatedAt)||Date.now(),projectId:typeof s.projectId==="string"?s.projectId:null,pinned:!!s.pinned,mode:modeOf(s.mode)};}).slice(0,30);
+      if(keepActive){
+        chatSessions=mapped.filter(function(s){return s.id!==keepActive.id;});
+        chatSessions.unshift(keepActive);
+        nextConversationId=Math.max(Number(nextConversationId)||1,chatSessions.reduce(function(max,s){return Math.max(max,Number(s.id)||0);},0)+1);
+        renderConversationList();
+        return;
+      }
+      chatSessions=mapped;
       nextConversationId=Math.max(1,chatSessions.reduce(function(max,s){return Math.max(max,Number(s.id)||0);},0)+1);
       activeConversation=createConversation(); conversationHistory=[]; attachedFiles=[]; renderAttachments(); chatInput.value=""; autoGrow(); chatThread.innerHTML=""; renderChatWelcome(); updateConversationTitle(); renderConversationList();
     },
