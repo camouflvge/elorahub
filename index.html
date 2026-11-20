@@ -5953,7 +5953,7 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       </div>
 
       <div class="ab-stats">
-        <div class="ab-stat reveal"><strong>Chat · Code · Studio · Agent</strong><span>Four distinct workspaces, one assistant</span></div>
+        <div class="ab-stat reveal"><strong>Chat · Code · Studio</strong><span>Three workspaces, one assistant</span></div>
         <div class="ab-stat reveal"><strong>Groq + Gemini + fallback</strong><span>Multi-model pipeline — always a brain available</span></div>
         <div class="ab-stat reveal"><strong>Free · Private · Premium</strong><span>Transparent pricing, no hidden limits</span></div>
       </div>
@@ -6479,7 +6479,7 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
         <h2>Think it through, together.</h2>
         <p>Your chats, projects and artifacts, saved to your account — ready on any device.</p>
         <ul class="auth-promises">
-          <li><svg class="ec-i" aria-hidden="true"><use href="#i-sparkles"/></svg><span>Code, Studio, Agent — one assistant, four workspaces</span></li>
+          <li><svg class="ec-i" aria-hidden="true"><use href="#i-sparkles"/></svg><span>Chat, Code, Studio — one assistant, three workspaces</span></li>
           <li><svg class="ec-i" aria-hidden="true"><use href="#i-zap"/></svg><span>Live research, cited sources, real answers</span></li>
           <li><svg class="ec-i" aria-hidden="true"><use href="#i-eye"/></svg><span>Private by design — your chats stay yours</span></li>
         </ul>
@@ -7163,6 +7163,9 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     document.body.classList.toggle("chat-mode", name === "chat");
     if(name === "owner" && typeof refreshOwnerConsole === "function"){ refreshOwnerConsole(); }
     window.scrollTo({top:0, behavior:"instant" in window ? "instant" : "auto"});
+    // Kick IntersectionObserver for newly-visible pages (display:none→block doesn't always fire)
+    var activePage = document.getElementById("page-" + name);
+    if(activePage){ requestAnimationFrame(function(){ activePage.querySelectorAll(".reveal:not(.in-view)").forEach(function(el){ el.classList.add("in-view"); }); }); }
     currentPageName = name;
     if(window.EloraNav) window.EloraNav.record({ page:name }, !navReady);
     closeMobileMenu();
@@ -7639,9 +7642,10 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
   var SUPABASE_URL = "https://nzfunokxraffpqywpbbv.supabase.co";
   var SUPABASE_ANON_KEY = "sb_publishable_MX-qCRK6SWSFj7UzLe5Bxg_F4W6baP3";
   var supabaseClient = null;
-  var supabaseReady = SUPABASE_URL.indexOf("YOUR_") === -1 && SUPABASE_ANON_KEY.indexOf("YOUR_") === -1 && window.supabase;
-  if(supabaseReady){
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  var supabaseReady = false;
+  if(SUPABASE_URL.indexOf("YOUR_") === -1 && SUPABASE_ANON_KEY.indexOf("YOUR_") === -1 && SUPABASE_ANON_KEY.startsWith("eyJ") && window.supabase){
+    try { supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); supabaseReady = true; }
+    catch(e){ console.warn("Supabase init failed — using local accounts.", e); }
   }
 
   var currentUser = null; // { email, name } | null
