@@ -1100,11 +1100,12 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 
 /* ================ AUTH CARD (polished sign-in / sign-up) ================ */
 .auth-card{
-  max-width:880px; padding:0;
-  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  max-width:780px; padding:0;
+  display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  max-height:min(94vh,620px);
   background:linear-gradient(180deg,#141416 0%,#0b0b0d 100%);
   border:1px solid rgba(255,255,255,.08);
-  border-radius:24px;
+  border-radius:20px;
   box-shadow:0 60px 140px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.04);
   overflow:hidden;
   animation:auth-rise .32s cubic-bezier(.2,.8,.2,1) both;
@@ -1125,14 +1126,13 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 
 /* ---- Left: brand side ---- */
 .auth-aside{
-  position:relative; padding:34px 32px 36px;
+  position:relative; padding:28px 28px 30px;
   background:
     radial-gradient(70% 55% at 20% 20%,rgba(76,175,110,.18),rgba(76,175,110,0) 60%),
     radial-gradient(90% 70% at 90% 90%,rgba(80,120,255,.14),rgba(80,120,255,0) 60%),
     linear-gradient(180deg,#121214,#070708);
   overflow:hidden;
   display:flex; flex-direction:column; justify-content:space-between;
-  min-height:520px;
 }
 .auth-aside::before{
   content:""; position:absolute; inset:0; pointer-events:none;
@@ -1157,8 +1157,8 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 @keyframes auth-twinkle{ 0%,100%{ opacity:.25; transform:scale(.85); } 50%{ opacity:1; transform:scale(1.2); } }
 .auth-aside-copy{ position:relative; z-index:2; }
 .auth-aside-copy h2{
-  font-family:var(--font-body); font-weight:800; font-size:1.65rem; line-height:1.15;
-  letter-spacing:-.035em; color:var(--text-1); margin:0 0 10px;
+  font-family:var(--font-body); font-weight:800; font-size:1.4rem; line-height:1.15;
+  letter-spacing:-.035em; color:var(--text-1); margin:0 0 8px;
 }
 .auth-aside-copy p{ color:var(--text-2); font-size:.92rem; line-height:1.55; margin:0 0 20px; max-width:30ch; }
 .auth-promises{ list-style:none; padding:0; margin:0; display:grid; gap:11px; }
@@ -1166,15 +1166,15 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 .auth-promises .ec-i{ flex:none; width:16px; height:16px; color:#4caf6e; }
 
 /* ---- Right: form side ---- */
-.auth-form{ position:relative; padding:40px 40px 32px; display:flex; flex-direction:column; justify-content:center; min-width:0; }
-.auth-head{ margin-bottom:22px; }
-.auth-head h3{ font-family:var(--font-body); font-weight:800; font-size:1.55rem; letter-spacing:-.025em; color:var(--text-1); margin:0 0 6px; }
+.auth-form{ position:relative; padding:30px 32px 24px; display:flex; flex-direction:column; justify-content:center; min-width:0; overflow-y:auto; }
+.auth-head{ margin-bottom:18px; }
+.auth-head h3{ font-family:var(--font-body); font-weight:800; font-size:1.35rem; letter-spacing:-.025em; color:var(--text-1); margin:0 0 4px; }
 .auth-head p{ color:var(--text-3); font-size:.88rem; margin:0; }
 
 .social-row{ display:grid; gap:10px; }
 .social-btn{
   display:flex; align-items:center; justify-content:center; gap:10px;
-  padding:11px 14px; border-radius:12px;
+  padding:10px 14px; border-radius:10px;
   border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,0.03);
   color:var(--text-1); font-weight:650; font-size:.9rem;
@@ -1184,14 +1184,14 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 .social-btn svg{ width:18px; height:18px; flex:none; }
 .social-btn span{ min-width:0; }
 
-.divider-row{ display:flex; align-items:center; gap:12px; margin:22px 0; }
+.divider-row{ display:flex; align-items:center; gap:12px; margin:16px 0; }
 .divider-row::before, .divider-row::after{ content:""; flex:1; height:1px; background:rgba(255,255,255,.08); }
 .divider-row span{ color:var(--text-3); font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
 
-.field{ margin-bottom:14px; }
-.field label{ display:block; font-size:.78rem; font-weight:650; color:var(--text-2); margin-bottom:6px; letter-spacing:.01em; }
+.field{ margin-bottom:12px; }
+.field label{ display:block; font-size:.76rem; font-weight:650; color:var(--text-2); margin-bottom:5px; letter-spacing:.01em; }
 .field input{
-  width:100%; padding:11px 14px; border-radius:11px;
+  width:100%; padding:10px 14px; border-radius:10px;
   background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,.1);
   color:var(--text-1); font-size:.92rem; font-family:inherit; line-height:1.4;
   transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
@@ -1218,7 +1218,7 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 .auth-error::before{ content:""; width:4px; height:4px; border-radius:50%; background:currentColor; }
 
 .auth-submit{
-  margin-top:6px; height:46px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:4px; height:42px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
   background:linear-gradient(180deg,#fff 0%,#dcdcdc 100%); color:#0b0b0b;
   border:0; border-radius:12px; font:700 .95rem var(--font-body);
   box-shadow:0 10px 24px -14px rgba(255,255,255,.4);
@@ -1230,10 +1230,10 @@ body.chat-mode{ overflow:hidden; height:100vh; }
 .auth-submit:hover .ec-i{ transform:translateX(2px); }
 .auth-submit[disabled]{ opacity:.65; cursor:wait; }
 
-.modal-foot{ text-align:center; margin-top:18px; font-size:.86rem; color:var(--text-3); }
+.modal-foot{ text-align:center; margin-top:14px; font-size:.84rem; color:var(--text-3); }
 .modal-foot button{ background:none; border:none; color:var(--text-1); font-weight:700; font-size:.86rem; cursor:pointer; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(255,255,255,.3); }
 .modal-foot button:hover{ text-decoration-color:currentColor; }
-.modal-fineprint{ text-align:center; font-size:.72rem; color:var(--text-3); margin-top:16px; line-height:1.55; }
+.modal-fineprint{ text-align:center; font-size:.72rem; color:var(--text-3); margin-top:12px; line-height:1.55; }
 .modal-fineprint a{ color:var(--text-2); text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
 
 @media (max-width:760px){
@@ -4971,7 +4971,6 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
       <button data-nav="chat"><svg class="nav-ico" aria-hidden="true"><use href="#i-chat"/></svg><span>Chat</span></button>
       <button data-nav="code"><svg class="nav-ico" aria-hidden="true"><use href="#i-code"/></svg><span>Code</span></button>
       <button data-nav="pricing"><svg class="nav-ico" aria-hidden="true"><use href="#i-card"/></svg><span>Pricing</span></button>
-      <button data-nav="help"><svg class="nav-ico" aria-hidden="true"><use href="#i-help"/></svg><span>Help</span></button>
       <button data-nav="guidelines"><svg class="nav-ico" aria-hidden="true"><use href="#i-book"/></svg><span>Guidelines</span></button>
       <button data-nav="about"><svg class="nav-ico" aria-hidden="true"><use href="#i-spark"/></svg><span>About</span></button>
     </div>
@@ -4989,7 +4988,6 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
     <button data-nav="chat">Chat</button>
     <button data-nav="code">Code</button>
     <button data-nav="pricing">Pricing</button>
-    <button data-nav="help">Help</button>
     <button data-nav="changelog">What's new</button>
     <button data-nav="guidelines">Guidelines</button>
     <button data-nav="about">About</button>
@@ -5000,22 +4998,17 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
 
     <div class="hero">
       <div class="hero-copy reveal">
-        <div class="intro-badge" id="statusBadge">
-          <span class="intro-dot"></span>
-          <span id="statusText">elora is online</span>
-        </div>
-        <h1>Meet <em>elora</em>, the AI that actually thinks it through.</h1>
-        <p class="lede">Fix a bug, think through a decision, write the message you've been putting off. elora reads the whole conversation, remembers what matters about you, looks things up when the question is about now, and answers in seconds.</p>
+        <h1>Your ideas deserve<br>a smarter <em>conversation.</em></h1>
+        <p class="lede">elora reasons through problems, writes production code, searches the live web, and remembers what matters — all in one place.</p>
         <div class="hero-cta">
-          <button class="btn btn-primary btn-lg" data-nav="chat">Start chatting with elora</button>
-          <button class="btn btn-lg" data-nav="pricing">See plans &amp; pricing</button>
+          <button class="btn btn-primary btn-lg" data-nav="chat"><svg class="nav-ico" style="width:18px;height:18px;margin-right:6px"><use href="#i-spark"/></svg>Start with elora</button>
+          <button class="btn btn-lg" data-nav="pricing">View plans</button>
         </div>
         <div class="hero-meta">
-          <div><strong>Free</strong><span>To start, no card</span></div>
-          <div><strong>Four workspaces</strong><span>Chat, Code, Studio, Agent</span></div>
-          <div><strong>Live web</strong><span>Reads links, cites sources</span></div>
+          <div><strong>Free forever</strong><span>No credit card needed</span></div>
+          <div><strong>Multi-model</strong><span>Groq + Gemini fallback</span></div>
+          <div><strong>Web-grounded</strong><span>Searches &amp; cites sources</span></div>
         </div>
-        <div class="model-credit">elora runs on leading open-weight and Gemini models, with automatic fallback — if one model is busy, the next one answers.</div>
       </div>
 
       <div class="hero-visual hx2-wrap reveal">
@@ -5028,7 +5021,6 @@ html.reduce-motion .hx2-code .ln{ clip-path:none!important; }
                 <button type="button" role="tab" data-scene="chat" aria-selected="true" class="is-on">Chat</button>
                 <button type="button" role="tab" data-scene="code" aria-selected="false">Code</button>
                 <button type="button" role="tab" data-scene="studio" aria-selected="false">Studio</button>
-                <button type="button" role="tab" data-scene="agent" aria-selected="false">Agent</button>
                 <span class="hx2-glider" aria-hidden="true"></span>
               </div>
             </div>
@@ -5080,18 +5072,7 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
                 </div>
               </section>
 
-              <section class="hx2-scene" data-scene="agent" aria-label="Agent: researches and delivers">
-                <div class="hx2-agent">
-                  <div class="hx2-agent-top"><b>Best budget laptop for coding</b><em class="hx2-pct">0%</em></div>
-                  <div class="hx2-agent-bar"><i></i></div>
-                  <ol class="hx2-agent-steps">
-                    <li><span class="hx2-dot"></span>Searched three angles: reviews, benchmarks, prices</li>
-                    <li><span class="hx2-dot"></span>Read notebookcheck.net, rtings.com, pcmag.com</li>
-                    <li><span class="hx2-dot"></span>Compared keyboards, battery life and RAM</li>
-                    <li><span class="hx2-dot"></span>Writing the recommendation</li>
-                  </ol>
-                </div>
-              </section>
+              <!-- Agent is part of Code — no separate tab -->
             </div>
 
             <div class="hx2-prompt" aria-hidden="true">
@@ -5106,16 +5087,16 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     <!-- DEMO: an auto-playing walkthrough of real use cases -->
     <div class="section hx-demo-section" id="demo">
       <div class="section-head reveal">
-        <span class="eyebrow-plain">See it work</span>
-        <h2>One assistant for code, decisions, writing and learning</h2>
-        <p>Here's what a normal session looks like. Pick a tab, or let it play.</p>
+        <span class="eyebrow-plain">See it in action</span>
+        <h2>One conversation. Any problem.</h2>
+        <p>Watch how elora handles real requests — pick a tab or let it play.</p>
       </div>
       <div class="hx-demo reveal" id="heroDemo">
         <div class="hx-demo-tabs" role="tablist" aria-label="Demo examples">
           <button type="button" role="tab" class="hx-tab is-active" data-demo="0"><span>Code</span><i><b></b></i></button>
-          <button type="button" role="tab" class="hx-tab" data-demo="1"><span>Think</span><i><b></b></i></button>
-          <button type="button" role="tab" class="hx-tab" data-demo="2"><span>Write</span><i><b></b></i></button>
-          <button type="button" role="tab" class="hx-tab" data-demo="3"><span>Learn</span><i><b></b></i></button>
+          <button type="button" role="tab" class="hx-tab" data-demo="1"><span>Research</span><i><b></b></i></button>
+          <button type="button" role="tab" class="hx-tab" data-demo="2"><span>Create</span><i><b></b></i></button>
+          <button type="button" role="tab" class="hx-tab" data-demo="3"><span>Solve</span><i><b></b></i></button>
           <button type="button" class="hx-demo-play" id="demoPlayBtn" aria-label="Pause demo" title="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="hx-ic-pause" d="M8 5v14M16 5v14"/><path class="hx-ic-play" d="M7 5l12 7-12 7z"/></svg></button>
         </div>
         <div class="hx-screen">
@@ -5126,33 +5107,32 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
       </div>
     </div>
 
-    <!-- WHAT IT HELPS WITH -->
+    <!-- CAPABILITIES -->
     <div class="section">
       <div class="section-head reveal">
-        <span class="eyebrow-plain">What it's for</span>
-        <h2>Real help, not a demo that falls apart</h2>
-        <p>The four things people use elora for most — and what to expect from each.</p>
+        <span class="eyebrow-plain">What elora does</span>
+        <h2>Everything you'd ask a brilliant colleague</h2>
       </div>
       <div class="hx-uses">
         <article class="hx-use reveal">
           <div class="hx-use-icon"><svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg></div>
-          <h3>Code</h3>
-          <ul><li>Paste an error and the code around it — get the cause and a fix, not a checklist</li><li>Write complete, runnable scripts and functions</li><li>Review code for bugs, edge cases and readability</li><li>Attach source files (.py, .js, .ts and more) so it reads the real thing</li></ul>
+          <h3>Ship code faster</h3>
+          <ul><li>Debug with the exact error — get root cause and fix, not a checklist</li><li>Generate complete, production-ready functions and scripts</li><li>Multi-step agent mode: plans, builds, reviews, delivers files</li><li>Reads .py, .js, .ts, .html and 30+ file types you attach</li></ul>
+        </article>
+        <article class="hx-use reveal">
+          <div class="hx-use-icon"><svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Research anything</h3>
+          <ul><li>Live web search with cited sources you can verify</li><li>Read and summarise links, articles, and documentation</li><li>Compare options with real trade-offs, not vibes</li><li>Deep-dive mode for thorough, multi-source answers</li></ul>
         </article>
         <article class="hx-use reveal">
           <div class="hx-use-icon"><svg viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 8h14M5 8l-2.5 6a2.8 2.8 0 0 0 5 0zM19 8l-2.5 6a2.8 2.8 0 0 0 5 0z"/></svg></div>
-          <h3>Think</h3>
-          <ul><li>Lay out the real trade-offs before a decision you can't undo</li><li>Turn a messy goal into a step-by-step plan</li><li>Get blunt feedback on an idea, a plan or a pitch</li><li>Ask "why?" and it follows the thread of the conversation</li></ul>
+          <h3>Reason through decisions</h3>
+          <ul><li>Lay out trade-offs before a decision you can't undo</li><li>Turn a messy goal into a concrete action plan</li><li>Push back on its own answer — it re-reasons, not repeats</li><li>Understands images, diagrams, and screenshots you share</li></ul>
         </article>
         <article class="hx-use reveal">
           <div class="hx-use-icon"><svg viewBox="0 0 24 24"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17z"/></svg></div>
-          <h3>Write</h3>
-          <ul><li>Emails and messages that sound like you, in the tone you ask for</li><li>Rewrite a draft shorter, clearer or more confident</li><li>Posts, bios, descriptions and cover letters</li><li>Replies in 16 languages, including Georgian</li></ul>
-        </article>
-        <article class="hx-use reveal">
-          <div class="hx-use-icon"><svg viewBox="0 0 24 24"><path d="m2.5 9.5 9.5-5 9.5 5-9.5 5zM6.5 11.6V16c1.5 1.5 3.5 2.5 5.5 2.5s4-1 5.5-2.5v-4.4"/></svg></div>
-          <h3>Learn</h3>
-          <ul><li>Explanations at your level — "like I'm 12" or "like I'm an engineer"</li><li>Worked examples and practice questions</li><li>Upload a screenshot or photo and ask what it shows</li><li>Follow-ups like "give me an example" are one tap away</li></ul>
+          <h3>Create &amp; communicate</h3>
+          <ul><li>Draft emails, messages, and posts in your voice and tone</li><li>Rewrite anything shorter, clearer, or more persuasive</li><li>Generate posters, videos, and creative assets in Studio</li><li>Works in 16+ languages including Georgian</li></ul>
         </article>
       </div>
     </div>
@@ -6005,153 +5985,132 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     </div>
   </section>
 
-  <!-- ============ HELP CENTER ============ -->
-  <section class="page" id="page-help">
-    <div class="section doc-page">
-      <div class="dx-hero">
-        <div class="dx-tabs" role="tablist" aria-label="Policies and help">
-          <button class="dp-tab" data-nav="help"><svg class="dx-ico"><use href="#i-help"/></svg>Help center</button>
-          <button class="dp-tab" data-nav="changelog"><svg class="dx-ico"><use href="#i-star"/></svg>What's new</button>
-          <button class="dp-tab" data-nav="guidelines"><svg class="dx-ico"><use href="#i-book"/></svg>Guidelines</button>
-          <button class="dp-tab" data-nav="privacy"><svg class="dx-ico"><use href="#i-lock"/></svg>Privacy</button>
-          <button class="dp-tab" data-nav="terms"><svg class="dx-ico"><use href="#i-doc"/></svg>Terms</button>
+  <!-- ============ HELP CENTER (redesigned — clean, beautiful, standalone) ============ -->
+  <section class=”page” id=”page-help”>
+    <div class=”section” style=”max-width:960px;margin:0 auto;padding-top:48px;”>
+
+      <!-- Hero -->
+      <div class=”reveal” style=”text-align:center;margin-bottom:56px;”>
+        <div style=”display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);margin-bottom:20px;”>
+          <svg style=”width:28px;height:28px;color:var(--text-2);” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”1.5” stroke-linecap=”round” stroke-linejoin=”round”><circle cx=”12” cy=”12” r=”10”/><path d=”M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3”/><line x1=”12” y1=”17” x2=”12.01” y2=”17”/></svg>
         </div>
-        <div class="dx-icon"><svg class="dx-ico"><use href="#i-help"/></svg></div>
-        <span class="dx-kicker">Help center</span>
-        <h1>How can we <em>help?</em></h1>
-        <p class="dx-sub">Quick answers about chatting, coding, tasks, files, memory and plans.</p>
-        <label class="hc-search">
-          <svg class="dx-ico"><use href="#i-search"/></svg>
-          <input type="search" id="helpSearch" placeholder="Search help — try “task”, “files” or “memory”" autocomplete="off" aria-label="Search help">
+        <h1 style=”font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.03em;margin:0 0 12px;”>How can we help?</h1>
+        <p style=”color:var(--text-2);font-size:1.1rem;max-width:480px;margin:0 auto 24px;”>Find answers fast, or ask elora directly in the chat.</p>
+        <label class=”hc-search” style=”max-width:520px;margin:0 auto;”>
+          <svg class=”dx-ico”><use href=”#i-search”/></svg>
+          <input type=”search” id=”helpSearch” placeholder=”Search — try “task”, “files” or “memory”” autocomplete=”off” aria-label=”Search help”>
         </label>
-        <div class="hc-quick">
-          <button type="button" data-help-q="task">Task mode</button>
-          <button type="button" data-help-q="code">Code</button>
-          <button type="button" data-help-q="file">Files</button>
-          <button type="button" data-help-q="memory">Memory</button>
-          <button type="button" data-help-q="plan">Plans</button>
+      </div>
+
+      <!-- Quick-start cards (Claude-inspired 3-column) -->
+      <div class=”hc-block reveal” data-help-hide-on-search>
+        <div style=”display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;”>
+          <div style=”padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);”>
+            <div style=”width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);display:grid;place-items:center;margin-bottom:14px;”><svg style=”width:18px;height:18px;color:var(--text-2)” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round”><path d=”M12 19V5M6 11l6-6 6 6”/></svg></div>
+            <h3 style=”font-size:.95rem;font-weight:600;margin:0 0 6px;”>Start chatting</h3>
+            <p style=”color:var(--text-2);font-size:.85rem;line-height:1.5;margin:0;”>Create a free account, type anything, press Enter. elora handles the rest.</p>
+          </div>
+          <div style=”padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);”>
+            <div style=”width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);display:grid;place-items:center;margin-bottom:14px;”><svg style=”width:18px;height:18px;color:var(--text-2)” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round”><path d=”m8 8-4 4 4 4M16 8l4 4-4 4”/></svg></div>
+            <h3 style=”font-size:.95rem;font-weight:600;margin:0 0 6px;”>Switch to Code</h3>
+            <p style=”color:var(--text-2);font-size:.85rem;line-height:1.5;margin:0;”>Flip the Code toggle in the sidebar for complete, runnable code answers.</p>
+          </div>
+          <div style=”padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);”>
+            <div style=”width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);display:grid;place-items:center;margin-bottom:14px;”><svg style=”width:18px;height:18px;color:var(--text-2)” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round”><polygon points=”13 2 3 14 12 14 11 22 21 10 12 10 13 2”/></svg></div>
+            <h3 style=”font-size:.95rem;font-weight:600;margin:0 0 6px;”>Use Task mode</h3>
+            <p style=”color:var(--text-2);font-size:.85rem;line-height:1.5;margin:0;”>Press Task for multi-step jobs. elora plans, executes, and delivers files.</p>
+          </div>
         </div>
       </div>
 
-      <div class="hc-wrap">
-        <div class="hc-block" data-help-hide-on-search>
-          <div class="hc-title"><h2>Get started in a minute</h2><p>No account needed for a first try</p></div>
-          <ol class="hc-start">
-            <li><h3>Open the chat</h3><p>Type anything and press <strong>Enter</strong>. Sign up free to keep your history and let elora remember you.</p></li>
-            <li><h3>Pick how elora answers</h3><p>Choose Balanced, Quick, Deep dive or Code from the mode menu, or switch to the <strong>Code</strong> tab for programming.</p></li>
-            <li><h3>Hand over bigger jobs</h3><p>Press <strong>Task</strong> next to the + button. elora plans the steps, does them one by one, and gives you the files.</p></li>
-          </ol>
+      <!-- Topics grid -->
+      <div class=”hc-block”>
+        <h2 style=”font-size:1.3rem;font-weight:650;margin:0 0 20px;”>Browse topics</h2>
+        <div class=”hc-grid” id=”helpTopics”>
+          <details class=”help-card” data-keywords=”chat send enter reply copy regenerate edit follow-up stop”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-chat”/></svg></span><div><h3>Chatting with elora</h3><p>Send, edit, stop and retry replies.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li><kbd>Enter</kbd> sends, <kbd>Shift + Enter</kbd> starts a new line.</li>
+              <li>Hover a reply to copy, rate, save, or regenerate it.</li>
+              <li>Press <kbd>↑</kbd> in an empty box to edit your last message.</li>
+              <li>The send button becomes Stop while elora is replying.</li>
+            </ul></div>
+          </details>
+          <details class=”help-card” data-keywords=”code mode programming python javascript debug files copy agent”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-code”/></svg></span><div><h3>Coding &amp; agent mode</h3><p>Code generation, debugging, and multi-step tasks.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li>Switch to <strong>Code</strong> in the sidebar for technical, runnable answers.</li>
+              <li>Attach .py, .js, .ts, .html and 30+ file types — elora reads them.</li>
+              <li>Agent mode plans steps, searches the web, and delivers files autonomously.</li>
+              <li>Paste the exact error message for the best diagnosis.</li>
+            </ul></div>
+          </details>
+          <details class=”help-card” data-keywords=”files images upload attach pdf word photo size limit drag”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-paperclip”/></svg></span><div><h3>Files &amp; images</h3><p>What elora can read and size limits.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li>Drag files in, press <kbd>Ctrl + U</kbd>, or use the + menu.</li>
+              <li>Images up to 3 MB; text/code files up to 200 KB (~30k characters).</li>
+              <li>PDFs and Word docs are attached by name — paste text for best results.</li>
+            </ul></div>
+          </details>
+          <details class=”help-card” data-keywords=”memory privacy forget export delete clear data remember”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-shield”/></svg></span><div><h3>Memory &amp; privacy</h3><p>Control what elora remembers about you.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li>Memory saves a short note of stable facts when you're signed in.</li>
+              <li>See, clear, or disable it in Settings → Privacy.</li>
+              <li>Export or delete all chats from the same page.</li>
+            </ul></div>
+          </details>
+          <details class=”help-card” data-keywords=”settings personalise customize theme font name instructions tone style”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-sliders”/></svg></span><div><h3>Personalisation</h3><p>Theme, instructions, and reply style.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li>Settings → Account: your name, role, and custom instructions.</li>
+              <li>Settings → General: theme, font, and conversation width.</li>
+              <li>Settings → Capabilities: search, links, suggestions, tone.</li>
+              <li>Open settings with <kbd>Ctrl + ,</kbd>.</li>
+            </ul></div>
+          </details>
+          <details class=”help-card” data-keywords=”plan plans pricing billing credits limit free private premium cancel upgrade usage”>
+            <summary><span class=”dx-ci”><svg class=”dx-ico”><use href=”#i-card”/></svg></span><div><h3>Plans &amp; billing</h3><p>Limits, upgrades, and cancellation.</p></div><svg class=”dx-ico hc-chev”><use href=”#i-chevron-down”/></svg></summary>
+            <div class=”hc-body”><ul>
+              <li>Free has a daily limit. Private and Premium give much more.</li>
+              <li>Check usage in Settings → Usage.</li>
+              <li>Cancel any time — access continues through the billing period.</li>
+            </ul></div>
+          </details>
         </div>
+        <p class=”hc-empty” id=”helpEmpty”>Nothing matches — try another word, or ask elora directly.</p>
+      </div>
 
-        <div class="hc-block">
-          <div class="hc-title"><h2>Browse topics</h2><p>Open a card for the details</p></div>
-          <div class="hc-grid" id="helpTopics">
-            <details class="help-card" data-keywords="chat send enter reply copy regenerate edit follow-up stop">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-chat"/></svg></span><div><h3>Chatting with elora</h3><p>Sending, editing, stopping and retrying replies.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li><kbd>Enter</kbd> sends, <kbd>Shift</kbd> + <kbd>Enter</kbd> starts a new line.</li>
-                <li>Hover a reply to <strong>copy</strong> it, rate it, save it, or ask for a <strong>different answer</strong>.</li>
-                <li>Press <kbd>↑</kbd> in an empty box to edit your last message and send it again.</li>
-                <li>Changed your mind mid-reply? The send button turns into <strong>Stop</strong>.</li>
-                <li>Tap a suggestion under a reply to ask the obvious next question in one click.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="code mode programming python javascript debug files copy">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-code"/></svg></span><div><h3>Coding with elora</h3><p>Code mode, source files and copy-ready blocks.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li>Switch to <strong>Code</strong> at the top of the chat sidebar — elora leans technical and gives complete, runnable code.</li>
-                <li>Attach source files (.py, .js, .ts, .html, .sql and 30+ more) and elora reads them.</li>
-                <li>Every code block shows its language or file name and has a <strong>Copy</strong> button.</li>
-                <li>Paste the exact error message — elora traces through the code before suggesting a fix.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="task mode plan steps progress files download web search stop">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-bolt"/></svg></span><div><h3>Task mode</h3><p>Let elora plan and work through a bigger job.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li>Press <strong>Task</strong> beside the + button (or + → <strong>Run as a task</strong>), then describe the job.</li>
-                <li>elora writes a plan of 2–6 steps and does them one at a time. Each step can search the web.</li>
-                <li>Everything shows up as a live trail — open any row to see the search, the result, or the file it wrote.</li>
-                <li>The <strong>Progress</strong> panel lists the steps, the output files and what was used. Files can be downloaded, copied or saved to Artifacts.</li>
-                <li>A task uses one message from your allowance. Press Stop at any time.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="files images upload attach pdf word photo size limit drag">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-paperclip"/></svg></span><div><h3>Files &amp; images</h3><p>What elora can read, and how much.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li>Drag files onto the chat, press <kbd>Ctrl</kbd> + <kbd>U</kbd>, or use + → <strong>Add files or photos</strong>.</li>
-                <li><strong>Images</strong> up to 3 MB. <strong>Text and source-code files</strong> up to 200 KB — elora reads the first ~30,000 characters.</li>
-                <li>PDFs, Word documents and other formats are attached by name only for now. Paste the text if you need it read.</li>
-                <li>How many uploads each plan includes is listed on the Pricing page.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="memory privacy forget export delete clear data remember">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-lock"/></svg></span><div><h3>Memory &amp; privacy</h3><p>What elora remembers and how to control it.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li>When you're signed in, elora keeps a short summary of what you've told it, so new chats start informed.</li>
-                <li>Turn memory off, see it, or clear it in <strong>Settings → Privacy</strong>.</li>
-                <li>Export your chats or clear them all from the same place.</li>
-                <li>Read the full <button type="button" class="hc-link" data-nav="privacy">Privacy Policy</button>.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="settings personalise customize theme font name instructions tone style">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-sliders"/></svg></span><div><h3>Make elora yours</h3><p>Name, instructions, theme and reply style.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li><strong>Settings → Account</strong>: what elora should call you, what you do, and custom instructions for every reply.</li>
-                <li><strong>Settings → General</strong>: theme, chat font, text size and how wide the conversation is.</li>
-                <li><strong>Settings → Capabilities</strong>: web search, reading links, Task mode, suggestions, reply style and tone.</li>
-                <li>Open Settings any time with <kbd>Ctrl</kbd> + <kbd>,</kbd>.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="plan plans pricing billing credits limit free private premium cancel upgrade usage">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-card"/></svg></span><div><h3>Plans &amp; usage</h3><p>Limits, credits, upgrading and cancelling.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li><strong>Free</strong> has a daily message limit. <strong>Private</strong> gives far more room; <strong>Premium</strong> is unlimited.</li>
-                <li>See what you have left in <strong>Settings → Usage</strong>.</li>
-                <li>Cancel any time — your plan stays active until the end of the billing period.</li>
-                <li>Compare everything on the <button type="button" class="hc-link" data-nav="pricing">Pricing page</button>.</li>
-              </ul></div>
-            </details>
-            <details class="help-card" data-keywords="projects artifacts saved scheduled connectors github google workspace sidebar">
-              <summary><span class="dx-ci"><svg class="dx-ico"><use href="#i-artifact"/></svg></span><div><h3>Projects, artifacts &amp; connectors</h3><p>Keep work organised and connect your tools.</p></div><svg class="dx-ico hc-chev"><use href="#i-chevron-down"/></svg></summary>
-              <div class="hc-body"><ul>
-                <li><strong>Projects</strong> group related chats; <strong>Artifacts</strong> keep replies and files you saved with the bookmark button.</li>
-                <li>Pin a chat from the sidebar to keep it at the top.</li>
-                <li><strong>Settings → Connectors</strong> is where you link or unlink GitHub and Google.</li>
-              </ul></div>
-            </details>
-          </div>
-          <p class="hc-empty" id="helpEmpty">Nothing matches that yet — try another word, or just ask elora in the chat.</p>
+      <!-- Troubleshooting -->
+      <div class=”hc-block” style=”margin-top:40px;”>
+        <h2 style=”font-size:1.3rem;font-weight:650;margin:0 0 20px;”>Troubleshooting</h2>
+        <div class=”hc-faq” id=”helpFaq”>
+          <details data-keywords=”busy error try again models overloaded”><summary><svg class=”dx-ico”><use href=”#i-refresh”/></svg>elora says it's busy</summary><p>All models are occasionally saturated at once. Wait a moment and press <strong>Try again</strong>.</p></details>
+          <details data-keywords=”limit out of messages credits free plan”><summary><svg class=”dx-ico”><use href=”#i-gauge”/></svg>Out of messages</summary><p>Free resets daily. Upgrade to Private or Premium for more room — check Settings → Usage.</p></details>
+          <details data-keywords=”file not read pdf word document upload”><summary><svg class=”dx-ico”><use href=”#i-file”/></svg>File not read</summary><p>Oversized images or unsupported formats are skipped. Paste the key content as text instead.</p></details>
+          <details data-keywords=”task stopped failed halfway run again”><summary><svg class=”dx-ico”><use href=”#i-bolt”/></svg>Task stopped midway</summary><p>Press <strong>Run again</strong> under the task. Each step is its own request.</p></details>
+          <details data-keywords=”old version broken refresh cache update”><summary><svg class=”dx-ico”><use href=”#i-monitor”/></svg>Page looks broken</summary><p>Hard-refresh: <strong>Ctrl + Shift + R</strong> (Windows) or <strong>⌘ + Shift + R</strong> (Mac).</p></details>
         </div>
+      </div>
 
-        <div class="hc-block" data-help-hide-on-search>
-          <div class="hc-title"><h2>Keyboard shortcuts</h2><p>On a Mac, use ⌘ instead of Ctrl</p></div>
-          <div class="hc-keys">
-            <div><span>New chat</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
-            <div><span>Open settings</span><kbd>Ctrl</kbd><kbd>,</kbd></div>
-            <div><span>Add files</span><kbd>Ctrl</kbd><kbd>U</kbd></div>
-            <div><span>Send message</span><kbd>Enter</kbd></div>
-            <div><span>New line</span><kbd>Shift</kbd><kbd>Enter</kbd></div>
-            <div><span>Edit your last message</span><kbd>↑</kbd></div>
-            <div><span>Close menus and windows</span><kbd>Esc</kbd></div>
-          </div>
+      <!-- Keyboard shortcuts -->
+      <div class=”hc-block” data-help-hide-on-search style=”margin-top:40px;”>
+        <h2 style=”font-size:1.3rem;font-weight:650;margin:0 0 20px;”>Keyboard shortcuts</h2>
+        <div class=”hc-keys”>
+          <div><span>New chat</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
+          <div><span>Settings</span><kbd>Ctrl</kbd><kbd>,</kbd></div>
+          <div><span>Add files</span><kbd>Ctrl</kbd><kbd>U</kbd></div>
+          <div><span>Send</span><kbd>Enter</kbd></div>
+          <div><span>New line</span><kbd>Shift</kbd><kbd>Enter</kbd></div>
+          <div><span>Edit last message</span><kbd>↑</kbd></div>
         </div>
+      </div>
 
-        <div class="hc-block">
-          <div class="hc-title"><h2>Fix a problem</h2><p>The things people run into most</p></div>
-          <div class="hc-faq" id="helpFaq">
-            <details data-keywords="busy error try again models overloaded"><summary><svg class="dx-ico"><use href="#i-refresh"/></svg>elora says it's busy or couldn't answer</summary><p>elora already switches between several AI models when one is overloaded, but now and then all of them are busy at once. Wait a few seconds and press <strong>Try again</strong> under the message.</p></details>
-            <details data-keywords="limit out of messages credits free plan"><summary><svg class="dx-ico"><use href="#i-gauge"/></svg>I've run out of messages</summary><p>The Free plan has a daily limit that resets each day. Private and Premium give you much more room — check what's left in Settings → Usage, or compare plans on the Pricing page.</p></details>
-            <details data-keywords="file not read pdf word document upload"><summary><svg class="dx-ico"><use href="#i-file"/></svg>elora didn't read my file</summary><p>Images over 3 MB and text files over 200 KB are skipped, and PDFs or Word documents are attached by name only for now. Paste the important part as text and elora will work with it.</p></details>
-            <details data-keywords="task stopped failed halfway run again"><summary><svg class="dx-ico"><use href="#i-bolt"/></svg>A task stopped halfway</summary><p>Each step of a task is its own request, so a busy moment can interrupt it. Press <strong>Run the task again</strong> under the task and elora starts it fresh.</p></details>
-            <details data-keywords="forget context long conversation memory"><summary><svg class="dx-ico"><use href="#i-layers"/></svg>elora lost track of something said earlier</summary><p>Very long chats are trimmed to the most recent messages so replies stay fast. Start a new chat with a short summary of what matters, and keep memory on so elora remembers the basics about you.</p></details>
-            <details data-keywords="old version broken refresh cache update"><summary><svg class="dx-ico"><use href="#i-monitor"/></svg>The site looks out of date or broken</summary><p>Do a hard refresh to load the newest version — <strong>Ctrl + Shift + R</strong> on Windows, <strong>⌘ + Shift + R</strong> on a Mac.</p></details>
-          </div>
-        </div>
-
-        <div class="hc-cta reveal">
-          <div><h2>Still stuck?</h2><p>Ask elora — it knows how elorahub works — or email us at elorahubonline@gmail.com. We read every message.</p></div>
-          <div class="hc-cta-actions"><button class="btn btn-primary" data-nav="chat">Ask elora</button><a class="btn btn-ghost" href="mailto:elorahubonline@gmail.com?subject=elorahub%20help">Email us</a></div>
-        </div>
+      <!-- Contact CTA -->
+      <div class=”hc-cta reveal” style=”margin-top:48px;”>
+        <div><h2>Still need help?</h2><p>Ask elora directly — or reach our team at elorahubonline@gmail.com.</p></div>
+        <div class=”hc-cta-actions”><button class=”btn btn-primary” data-nav=”chat”>Ask elora</button><a class=”btn btn-ghost” href=”mailto:elorahubonline@gmail.com?subject=elorahub%20help”>Email us</a></div>
       </div>
     </div>
   </section>
@@ -8053,12 +8012,12 @@ startBtn.<span class="c-f">onclick</span> = timer.start;</pre>
     var SCENES = [
       { name:"Code", prompt:"My script crashes with KeyError: 'email' when a user has no email. Fix it?", steps:"Thought for 2.3s",
         answer:"The crash comes from `user['email']`, which assumes every user has that key. Use `.get()` and skip users without one:\n\n```py\nfor user in users:\n    email = user.get(\"email\")\n    if not email:\n        log.warning(\"User %s has no email\", user[\"id\"])\n        continue\n    send_welcome(email)\n```\n\nNow one incomplete record logs a warning instead of stopping the whole run." },
-      { name:"Think", prompt:"Remote job with 15% more pay, or stay where I'm up for a promotion?", steps:"Recalled memory · 2.8s",
-        answer:"**It comes down to three things:**\n\n1. **Two-year money** — a promotion raise may close most of that 15% gap.\n2. **Growth** — which role gives you the bigger scope next year?\n3. **How you work best** — remote suits some people far better than others.\n\nBefore deciding, ask your manager for the promotion's timing and salary in writing." },
-      { name:"Write", prompt:"Write a short, friendly message asking my landlord to fix the heating.", steps:"Thought for 1.6s",
+      { name:"Research", prompt:"Compare the mass layoff laws in California vs New York — what should a 200-person startup know?", steps:"Searched 14 sources · 3.1s",
+        answer:"**California (WARN Act)**\n- Applies at **75+ employees**; 60-day written notice for layoffs of 50+.\n- Covers part-time workers too — broader than federal WARN.\n\n**New York (NY WARN)**\n- Kicks in at **50+ employees**; 90-day notice (30 days longer).\n- Must also notify the state DOL and local workforce board.\n\n**For a 200-person startup:** both states apply. If you have workers in both, follow NY's 90-day timeline everywhere to stay safe, and budget for 60 days of benefits continuation in CA." },
+      { name:"Create", prompt:"Write a short, friendly message asking my landlord to fix the heating.", steps:"Drafted in 1.6s",
         answer:"Hi Maria,\n\nHope you're well! The heating stopped working on Monday — the radiators stay cold even when it's on. Could you arrange for someone to take a look this week? I'm home most evenings after 6.\n\nThanks so much,\nNika" },
-      { name:"Learn", prompt:"Explain compound interest like I'm 12.", steps:"Thought for 1.9s",
-        answer:"Picture a jar with **100 coins**. Every year the bank adds **10%** of whatever is inside:\n\n- Year 1: +10 → **110**\n- Year 2: +11 → **121**\n- Year 3: +12.1 → **133**\n\nThe extra grows each year because you also earn on the coins you already earned. That's compound interest." }
+      { name:"Solve", prompt:"I have $12k in savings, $4k in credit-card debt at 22% APR, and want to start investing. What's the move?", steps:"Thought for 2.4s",
+        answer:"**Step 1 — Kill the debt first.** At 22% APR you're losing ~$73/month in interest. Pay that $4k off immediately from savings.\n\n**Step 2 — Rebuild your cushion.** Keep 3 months of expenses (~$5k) liquid in a high-yield savings account earning 4–5%.\n\n**Step 3 — Invest the rest.** The remaining ~$3k can open a Roth IRA in a low-cost index fund (e.g. VTI or VXUS). Automate $200/month going forward.\n\nNo guaranteed investment beats a 22% return from eliminating debt." }
     ];
     var index = 0, paused = false, visible = false, running = false, token = 0;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
